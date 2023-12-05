@@ -44,6 +44,7 @@ public class FoodCard {
         } else if(type.equals("wild")) {
             return "The greatest delicacy in existence...except perhaps pizza.";
         }
+        level--;
         switch (type) {
             case "fruit" -> {
             }
@@ -67,6 +68,7 @@ public class FoodCard {
         } else if(type.equals("wild")) {
             return "1. Identify your dimension level\n2. Look at the different food you need for your meal\n3. Obtain one of each different food up to your dimension level\n4. If no present food of a type, choose a different one or disregard";
         }
+        level--;
         switch (type) {
             case "fruit" -> {
             }
@@ -88,6 +90,7 @@ public class FoodCard {
         if(level == 0 || type.equals("wild")) {
             return 1;
         }
+        level--;
         switch (type) {
             case "fruit" -> {
             }

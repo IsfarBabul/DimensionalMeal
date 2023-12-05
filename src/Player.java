@@ -6,6 +6,7 @@ public class Player {
     private ArrayList<DimensionCard> dimensionHand;
     private int dimensionLevel;
     private int actionsLeft;
+    private ArrayList<MealCard> mealCompletion;
     public Player(String name) {
         playerName = name;
     }
@@ -18,5 +19,14 @@ public class Player {
     }
     public String getPlayerName() {
         return playerName;
+    }
+    public void increaseDimensionLevel(int incrementLevel) {
+        dimensionLevel += incrementLevel;
+    }
+    public void decreaseActions(int decrement) {
+        actionsLeft -= decrement;
+    }
+    public void increaseActions(int increment) {
+        actionsLeft += increment;
     }
 }

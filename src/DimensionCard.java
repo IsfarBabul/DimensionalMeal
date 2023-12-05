@@ -18,6 +18,9 @@ public class DimensionCard {
     public String getDimensionDescription() {
         return dimensionDescription;
     }
+    public String getDimensionInstruction() {
+        return dimensionInstruction;
+    }
     private String descriptor(int level) {
         String[] descriptor = {"A singular and lonely point in space.", "A line that stretches out infinitely to both sides.", "A plane that comprises the basics of the world.", "A space that forms our reality.", "A spacetime that cannot simply be comprehended."};
         return descriptor[level];
