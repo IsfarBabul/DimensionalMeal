@@ -20,13 +20,13 @@ public class DimensionalMeal {
     public void start(Scanner scan) {
         this.scan = scan;
         setup();
-        Player player = new Player();
-        System.out.println(player.getPlayerName());
-        loadGUI(player);
+        loadGUI(turnOrder[0]);
     }
     private void setup() {
         System.out.println("How many players would like to play? ");
         int numPlayers = scan.nextInt();
+        Player player = new Player();
+        System.out.println(player.getPlayerName());
     }
     public void loadGUI(Player currentPlayer) {
         System.out.println("\uD83C\uDFB4(65) - Dimension Deck              \uD83D\uDDC2️(3) - Dimension Discard");
@@ -62,7 +62,7 @@ public class DimensionalMeal {
         System.out.println();
         System.out.println("Enter an Option:");
     }
-    //PRIVATE METHODS
+    //-----------------------------!!!!!!!!!!!!!!-------------------PRIVATE METHODS-------------------!!!!!!!!!!!!!!!!!------------------------------------any code below this threshold must be private--------------------
     private void shuffleMealDeck() {
         int lengthOfArray = mealDeck.size();
         ArrayList<MealCard> newDeck = new ArrayList<>(lengthOfArray);
@@ -77,7 +77,7 @@ public class DimensionalMeal {
     private void shuffleDimensionDeck() {
         int lengthOfArray = dimensionDeck.size();
         ArrayList<DimensionCard> newDeck = new ArrayList<>(lengthOfArray);
-        while(!dimensionDiscard.isEmpty()) {
+        while(!dimensionDeck.isEmpty()) {
             int randNum = (int) (Math.random() * (lengthOfArray - 1));
             newDeck.add(dimensionDeck.get(randNum));
             dimensionDeck.remove(randNum);
@@ -95,6 +95,10 @@ public class DimensionalMeal {
             lengthOfArray = foodDeck.size();
         }
         foodDeck = newDeck;
+    }
+    private void moveMealCards(ArrayList<MealCard> giftingDeck, int giftingIndex, ArrayList<MealCard> receivingDeck, int receivingIndex) {
+        receivingDeck.add(receivingIndex, giftingDeck.get(giftingIndex));
+        giftingDeck.remove(giftingDeck.get(giftingIndex));
     }
 }
 
