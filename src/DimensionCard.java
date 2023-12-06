@@ -1,11 +1,17 @@
 public class DimensionCard {
     private final String dimensionName;
-    private final int dimensionLevel;
+    private int dimensionLevel;
     private final String dimensionDescription;
     private final String dimensionInstruction;
-    public DimensionCard(String name, int level) {
+    public DimensionCard(String name) {
         dimensionName  = name;
-        dimensionLevel = level;
+        switch (name) {
+            case "\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11" -> dimensionLevel = 0;
+            case "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C" -> dimensionLevel = 1;
+            case "\uD83E\uDD69", "\uD83C\uDF64" -> dimensionLevel = 2;
+            case "\uD83C\uDF3E", "\uD83C\uDF5E" -> dimensionLevel = 3;
+            case "\uD83E\uDDC0", "\uD83C\uDF76" -> dimensionLevel = 4;
+        }
         dimensionDescription = descriptor(dimensionLevel);
         dimensionInstruction = instructor(dimensionLevel);
     }

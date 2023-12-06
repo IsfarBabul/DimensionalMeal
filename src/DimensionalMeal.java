@@ -9,6 +9,10 @@ public class DimensionalMeal {
     private ArrayList<MealCard> mealDeck;
     private ArrayList<MealCard> mealDiscard;
     private Player[] turnOrder;
+    private int orderIndex;
+    private int completeTurns;
+    private Player currentPlayer;
+    private boolean win;
     public DimensionalMeal() {
         foodDeck = new ArrayList<FoodCard>();
         foodDiscard = new ArrayList<FoodCard>();
@@ -16,17 +20,35 @@ public class DimensionalMeal {
         dimensionDiscard = new ArrayList<DimensionCard>();
         mealDeck = new ArrayList<MealCard>();
         mealDiscard = new ArrayList<MealCard>();
+        orderIndex = 0;
+        win = false;
     }
     public void start(Scanner scan) {
         this.scan = scan;
         setup();
-        loadGUI(turnOrder[0]);
+        while (!win) {
+            currentPlayer.increaseActions(4);
+            while (currentPlayer.getActionsLeft() > 0) {
+                loadGUI(turnOrder[0]);
+                int option = scan.nextInt();
+                optionOutcome(option);
+            }
+            orderIndex++;
+            if(orderIndex == turnOrder.length) {
+                completeTurns++;
+                orderIndex = 0;
+            }
+            currentPlayer = turnOrder[orderIndex];
+        }
     }
     private void setup() {
-        System.out.println("How many players would like to play? ");
-        int numPlayers = scan.nextInt();
-        Player player = new Player();
-        System.out.println(player.getPlayerName());
+        createPlayers();
+        createFoodDeck();
+        createDimensionDeck();
+        for (Player player : turnOrder) {
+            giveMealCard(player);
+        }
+        currentPlayer = turnOrder[0];
     }
     public void loadGUI(Player currentPlayer) {
         System.out.println("\uD83C\uDFB4(65) - Dimension Deck              \uD83D\uDDC2️(3) - Dimension Discard");
@@ -96,9 +118,47 @@ public class DimensionalMeal {
         }
         foodDeck = newDeck;
     }
-    private void moveMealCards(ArrayList<MealCard> giftingDeck, int giftingIndex, ArrayList<MealCard> receivingDeck, int receivingIndex) {
-        receivingDeck.add(receivingIndex, giftingDeck.get(giftingIndex));
-        giftingDeck.remove(giftingDeck.get(giftingIndex));
+    private void createPlayers() {
+        System.out.println("How many players would like to play? ");
+        int numPlayers = scan.nextInt();
+        turnOrder = new Player[numPlayers];
+        for (int i = 1; i <= numPlayers; i++) {
+            System.out.println("What is Player " + i + "'s name?");
+            Player player = new Player();
+            turnOrder[i - 1] = player;
+            System.out.println(player.getPlayerName());   //testing purposes
+        }
+    }
+    private void createFoodDeck() {
+        String[] foods = new String[]{"\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11", "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C", "\uD83E\uDD69", "\uD83C\uDF64", "\uD83C\uDF3E", "\uD83C\uDF5E", "\uD83E\uDDC0", "\uD83C\uDF76"};
+        for (String food : foods) {
+            for (int i = 0; i < 10; i++) {
+                FoodCard foodCard = new FoodCard(food, scan);
+                foodDeck.add(foodCard);
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            FoodCard foodCard = new FoodCard("\uD83C\uDF69", scan);
+            foodDeck.add(foodCard);
+        }
+        shuffleFoodDeck();
+    }
+    public void createDimensionDeck() {
+        String[] dimensions = new String[]{"⚫", "┃", "⬛", "⛊", "☀"};
+        for (int i = 0; i < 60; i++) {
+            DimensionCard dimensionCard = new DimensionCard(dimensions[0]);
+        }
+        for (int i = 0; i < 20; i++) {
+            DimensionCard dimensionCard = new DimensionCard(dimensions[1]);
+        }
+        shuffleDimensionDeck();
+    }
+    public void giveMealCard(Player player) {
+        MealCard mealCard = new MealCard(player.getDimensionLevel());
+        player.setMealCard(mealCard);
+    }
+    public void optionOutcome(int outcome) {
+
     }
 }
 

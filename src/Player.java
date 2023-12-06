@@ -23,6 +23,35 @@ public class Player {
     public String getPlayerName() {
         return playerName;
     }
+
+    public ArrayList<FoodCard> getFoodHand() {
+        return foodHand;
+    }
+
+    public ArrayList<DimensionCard> getDimensionHand() {
+        return dimensionHand;
+    }
+
+    public int getDimensionLevel() {
+        return dimensionLevel;
+    }
+
+    public MealCard getMealCard() {
+        return mealCard;
+    }
+
+    public void setMealCard(MealCard mealCard) {
+        this.mealCard = mealCard;
+    }
+
+    public ArrayList<MealCard> getMealCompletion() {
+        return mealCompletion;
+    }
+
+    public int getActionsLeft() {
+        return actionsLeft;
+    }
+
     public void increaseDimensionLevel(int incrementLevel) {
         dimensionLevel += incrementLevel;
     }
@@ -36,7 +65,6 @@ public class Player {
         foodHand = new ArrayList<>(0);
         dimensionHand = new ArrayList<>(0);
         dimensionLevel = 0;
-        mealCard = new MealCard(dimensionLevel);
         actionsLeft = 0;
     }
 }
