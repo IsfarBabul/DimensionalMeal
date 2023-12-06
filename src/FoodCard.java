@@ -97,17 +97,17 @@ public class FoodCard {
                               "Gain 4 Dimension cards",
                               "1. Gain 6 Dimension cards\n2. All other players gain 2 Dimension cards"};
         String[] protein = {"1. Choose an opponent\n2. They start their next turn with 1 fewer action",
-                            "On your next turn, start with 2 more actions",
+                            "1. On your next turn, start with 2 more actions\n2. They start their next turn with 1 fewer action",
                             "1. On your next turn, start with 3 more actions\n2. Choose an opponent\n3. They start their next turn with 1 fewer action",
                             "1. On your next turn, start with 5 more actions\n2. All other players start their next turn with 1 fewer action"};
         String[] grains = {"1. Choose an opponent\n2. They must discard a random card",
                            "1. All other players give up a random card\n2. Of those discard this way, you may gain one of those cards",
                            "1. All other players give up a random card\n2. Separate them into Food and Dimension cards\n3. Put the cards in their respective decks in any order you choose",
                            "1. All other players give up a random card\n2. Choose either the Food or Dimension discard\n3. Take the top 10 cards(or as many as you can) and put them \n   on top of the respective deck in any order you choose"};
-        String[] dairy = {"1. Choose two people(one can be you)\n2. A random card from each player will be given to the other player",
+        String[] dairy = {"1. Choose two opponents(or you and your opponent for 1v1s)\n2. A random card from each player will be given to the other player",
                           "1. One random card is chosen per player(including you) \n2. This card is given to the next person in turn order",
                           "1. Choose one food card you have(required)\n2. Choose an opponent\n3. They must discard all Food cards of that type",
-                          "1. Choose a Dimension level\n2. Choose an opponent\n3. They must discard all Dimension cards of that level or lower\n4. If they discard all Dimension cards in this way, they must discard their Meal card and gain a new one"};
+                          "1. Look at your Dimension level\n2. Choose an opponent\n3. They must discard all Dimension cards of that level or lower"};
         String[][] instructor = {fruit, vegetable, protein, grains, dairy};
         return instructor[numType][level];
     }
@@ -152,7 +152,7 @@ public class FoodCard {
         int[] fruit = {accessFruit1(currentPlayer), accessFruit2(currentPlayer), accessFruit3(currentPlayer), accessFruit4(currentPlayer, turnOrder)};
         int[] vegetable = {accessVegetable1(currentPlayer, dimensionDeck), accessVegetable2(currentPlayer, dimensionDeck), accessVegetable3(currentPlayer, dimensionDeck), accessVegetable4(currentPlayer, dimensionDeck, turnOrder)};
         int[] protein = {accessProtein1(), accessProtein2(), accessProtein3(), accessProtein4()};
-        int[] grains = {accessGrains1(), accessGrains2(), accessGrains3(), accessGrains4()};
+        int[] grains = {accessGrains1(currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder), accessGrains2(currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder), accessGrains3(currentPlayer, dimensionDeck, foodDeck, turnOrder), accessGrains4(currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder)};
         int[] dairy = {accessDairy1(), accessDairy2(), accessDairy3(), accessDairy4()};
         int[][] descriptor = {fruit, vegetable, protein, grains, dairy};
         return descriptor[numType][level];
@@ -362,33 +362,73 @@ public class FoodCard {
                 }
             }
         }
+
         System.out.println("Choose to take from the Dimension or Food deck");
         String choice = scan.nextLine();
         choice = choice.toLowerCase();
+
         if (choice.equals("dimension")) {
             ArrayList<DimensionCard> tempArray1 = new ArrayList<>(10);
-        }
-        String cardOptions = "[";
-        for (FoodCard food : tempArray1) {
-            cardOptions += food.getFoodName() + ", ";
-        }
-        for (DimensionCard dimension : tempArray2) {
-            cardOptions += dimension.getDimensionName();
-            if (!dimension.getDimensionName().equals(tempArray2.get(tempArray2.size() - 1).getDimensionName())) {
-                cardOptions += ", ";
+
+            for (int i = 10; i > 0; i--) {
+                Utility.moveDimensionCards(dimensionDiscard, i, tempArray1, i);
+            }
+
+            StringBuilder cardOptions = new StringBuilder("[");
+
+            for (DimensionCard dimension : tempArray1) {
+                cardOptions.append(dimension.getDimensionName());
+                if (!dimension.getDimensionName().equals(tempArray1.get(tempArray1.size() - 1).getDimensionName())) {
+                    cardOptions.append(", ");
+                }
+                cardOptions = new StringBuilder("]");
+            }
+
+            System.out.println("These are the Dimension cards obtained: " + cardOptions);
+            System.out.println("Choose what order to place them on the deck from top(which is 0) to bottom(the # of cards there are minus 1)");
+            ArrayList<DimensionCard> tempArray4 = new ArrayList<>(tempArray1.size());
+
+            for (DimensionCard dimensionCard : tempArray1) {
+                System.out.print("Position of " + dimensionCard + ": ");
+                int index = scan.nextInt();
+                tempArray4.add(index, dimensionCard);
+            }
+
+            for (int i = 0; i < tempArray4.size(); i++) {
+                Utility.moveDimensionCards(tempArray4, i, dimensionDeck, i);
+            }
+
+        } else {
+            ArrayList<FoodCard> tempArray2 = new ArrayList<>(10);
+
+            for (int i = 10; i > 0; i--) {
+                Utility.moveFoodCards(foodDiscard, i, tempArray2, i);
+            }
+
+            StringBuilder cardOptions = new StringBuilder("[");
+            for (FoodCard food : tempArray2) {
+                cardOptions.append(food.getFoodName());
+                if (!food.getFoodName().equals(tempArray2.get(tempArray2.size() - 1).getFoodName())) {
+                    cardOptions.append(", ");
+                }
+                cardOptions = new StringBuilder("]");
+            }
+
+            System.out.println("These are the Food cards obtained: " + cardOptions);
+            System.out.println("Choose what order to place them on the deck from top(which is 0) to bottom(the # of cards there are minus 1)");
+            ArrayList<FoodCard> tempArray3 = new ArrayList<>(tempArray2.size());
+
+            for (FoodCard foodCard : tempArray2) {
+                System.out.print("Position of " + foodCard + ": ");
+                int index = scan.nextInt();
+                tempArray3.add(index, foodCard);
+            }
+
+            for (int i = 0; i < tempArray3.size(); i++) {
+                Utility.moveFoodCards(tempArray3, i, foodDeck, i);
             }
         }
-        cardOptions = "]";
-        System.out.print("Among this list: " + cardOptions + ", type an index number corresponding to the item from left to right starting from 0: ");
-        int index = scan.nextInt();
-        if (index < tempArray1.size()) {
-            Utility.moveFoodCards(tempArray1, index, currentPlayer.getFoodHand());
-        } else {
-            index -= tempArray1.size();
-            Utility.moveDimensionCards(tempArray2, index, currentPlayer.getDimensionHand());
-        }
-        Utility.moveFoodCards(tempArray1, index, foodDiscard);
-        Utility.moveDimensionCards(tempArray2, index, dimensionDiscard);
+
         return 1;
     }
     public int accessDairy1() {
@@ -397,10 +437,26 @@ public class FoodCard {
     public int accessDairy2() {
         return 1;
     }
-    public int accessDairy3() {
+
+    public int accessDairy3(Player currentPlayer, Player[] turnOrder, ArrayList<FoodCard> foodDiscard) {
+
         return 1;
     }
     public int accessDairy4() {
         return 1;
+    }
+
+    /**------------------------Zero-----------------------**/
+    public int access0(Player currentPlayer, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard) {
+        for (FoodCard food : foodDeck) {
+            if (food.getFoodName().equals(foodDiscard.get(0))) {
+
+            }
+        }
+        return 1;
+    }
+    /**------------------------Wild-----------------------**/
+    public int accessWild() {
+
     }
 }

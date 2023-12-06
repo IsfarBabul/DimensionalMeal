@@ -28,6 +28,11 @@ public class DimensionalMeal {
         setup();
         while (!win) {
             currentPlayer.increaseActions(4);
+            currentPlayer.increaseActions(currentPlayer.getNextTurnActions());
+            currentPlayer.setNextTurnActions(0);
+            if (currentPlayer.getActionsLeft() < 0) {
+                System.out.println("You still have less than 0 actions. You lose your turn.");
+            }
             while (currentPlayer.getActionsLeft() > 0) {
                 loadGUI(turnOrder[0]);
                 int option = scan.nextInt();
@@ -158,7 +163,18 @@ public class DimensionalMeal {
         player.setMealCard(mealCard);
     }
     public void optionOutcome(int outcome) {
-
+        switch (outcome) {
+            case 0 -> playFoodCard();  // 3/5
+            case 1 -> buyFoodCard();       // 1/5
+            case 2 -> checkFoodCardStats();   // 2/5
+            case 3 -> buyDimensionCard();   // 1/5
+            case 4 -> fuse();               // 3/5
+            case 5 -> enhanceFuse();         // 3/5
+            case 6 -> checkFoodDiscard();            // 2/5
+            case 7 -> checkDimensionDiscard();        // 2/5
+            case 8 -> checkMealDiscard();             // 4/5
+            case 9 -> upgradeFoodCard();           // 3/5
+        }
     }
 }
 

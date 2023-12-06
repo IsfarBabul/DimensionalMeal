@@ -7,6 +7,7 @@ public class Player {
     private MealCard mealCard;
     private int dimensionLevel;
     private int actionsLeft;
+    private int nextTurnActions;
     private ArrayList<MealCard> mealCompletion;
     public Player(String name) {
         playerName = name;
@@ -52,6 +53,14 @@ public class Player {
         return actionsLeft;
     }
 
+    public int getNextTurnActions() {
+        return nextTurnActions;
+    }
+
+    public void setNextTurnActions(int nextTurnActions) {
+        this.nextTurnActions = nextTurnActions;
+    }
+
     public void increaseDimensionLevel(int incrementLevel) {
         dimensionLevel += incrementLevel;
     }
@@ -60,6 +69,12 @@ public class Player {
     }
     public void increaseActions(int increment) {
         actionsLeft += increment;
+    }
+    public void increaseNextTurnActions(int increment) {
+        nextTurnActions += increment;
+    }
+    public void decreaseNextTurnActions(int decrement) {
+        nextTurnActions -= decrement;
     }
     private void initializeInstances() {
         foodHand = new ArrayList<>(0);

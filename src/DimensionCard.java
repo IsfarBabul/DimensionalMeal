@@ -32,7 +32,7 @@ public class DimensionCard {
         return descriptor[level];
     }
     private String instructor(int level) {
-        String[] instructor = {"1. Fuse two points to make a line\n2. Enhance fuse four points to make a plane", "1. Fuse two lines to make a plane\n2. Enhance fuse four lines to make a space", "1. Fuse two planes to make a space\n2. Enhance fuse four points to make a spacetime", "1. Fuse two spaces to make a spacetime\n2. Enhance fuse four spaces to make a sprinkle", "1. Fuse two points to make a sprinkle\n2. Enhance fuse four spacetimes to make a ketchup bottle"};
+        String[] instructor = {"1. Fuse two points to make a line\n2. Enhance fuse four points to make a plane", "1. Fuse two lines to make a plane\n2. Enhance fuse four lines to make a space", "1. Fuse two planes to make a space\n2. Enhance fuse four points to make a spacetime", "1. Fuse two spaces to make a spacetime\n2. No enhanced fusions available", "1. Too Unstable to fuse\n2. Enhanced fusion is catastrophic"};
         return instructor[level];
     }
 }
