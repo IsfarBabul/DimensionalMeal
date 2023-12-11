@@ -1,4 +1,4 @@
-public class DimensionCard {
+public class DimensionCard extends Card{
     private final String dimensionName;
     private int dimensionLevel;
     private final String dimensionDescription;
