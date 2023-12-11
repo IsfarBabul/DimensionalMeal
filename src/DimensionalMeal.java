@@ -138,7 +138,14 @@ public class DimensionalMeal {
         String[] foods = new String[]{"\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11", "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C", "\uD83E\uDD69", "\uD83C\uDF64", "\uD83C\uDF3E", "\uD83C\uDF5E", "\uD83E\uDDC0", "\uD83C\uDF76"};
         for (String food : foods) {
             for (int i = 0; i < 10; i++) {
-                FoodCard foodCard = new FoodCard(food, scan);
+                FoodCard foodCard = null;
+                switch (food) {
+                    case "\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11" -> foodCard = new FruitFoodCard(food, scan);
+                    case "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C" -> foodCard = new VegetableFoodCard(food, scan);
+                    case "\uD83E\uDD69", "\uD83C\uDF64" -> foodCard = new ProteinFoodCard(food, scan);
+                    case "\uD83C\uDF3E", "\uD83C\uDF5E" -> foodCard = new GrainsFoodCard(food, scan);
+                    case "\uD83E\uDDC0", "\uD83C\uDF76" -> foodCard = new DairyFoodCard(food, scan);
+                }
                 foodDeck.add(foodCard);
             }
         }
@@ -152,15 +159,19 @@ public class DimensionalMeal {
         String[] dimensions = new String[]{"⚫", "┃", "⬛", "⛊", "☀"};
         for (int i = 0; i < 60; i++) {
             DimensionCard dimensionCard = new DimensionCard(dimensions[0]);
+            dimensionDeck.add(dimensionCard);
         }
         for (int i = 0; i < 20; i++) {
             DimensionCard dimensionCard = new DimensionCard(dimensions[1]);
+            dimensionDeck.add(dimensionCard);
         }
         shuffleDimensionDeck();
     }
-    public void giveMealCard(Player player) {
-        MealCard mealCard = new MealCard(player.getDimensionLevel());
-        player.setMealCard(mealCard);
+    public void createMealDeck(Player player) {
+        String[] foods = new String[]{"\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11", "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C", "\uD83E\uDD69", "\uD83C\uDF64", "\uD83C\uDF3E", "\uD83C\uDF5E", "\uD83E\uDDC0", "\uD83C\uDF76"};
+        for (String food : foods) {
+
+        }
     }
     public void optionOutcome(int outcome) {
         switch (outcome) {

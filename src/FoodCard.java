@@ -9,10 +9,14 @@ public class FoodCard extends Card{
     private String abilityInstruction;
     private int abilityCost;
     private int foodLevel;
+    private String type;
+    private String description;
+    private String instruction;
+    private int cost;
+    private int level;
     public FoodCard(String name, Scanner scan) {
         super(name, scan);
         this.scan = scan;
-        foodName = name;
         foodName = name;
         switch (name) {
             case "\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11" -> foodType = "fruit";
@@ -129,8 +133,8 @@ public class FoodCard extends Card{
         }
         int[] fruit = {0, 0, 0, 0};
         int[] vegetable = {0, 1, 2, 3};
-        int[] protein = {1, 1, 2, 4};
-        int[] grains = {2, 3, 3, 4};
+        int[] protein = {1, 2, 3, 4};
+        int[] grains = {2, 3, 4, 5};
         int[] dairy = {1, 2, 3, 4};
         int[][] descriptor = {fruit, vegetable, protein, grains, dairy};
         return descriptor[numType][level];
@@ -505,7 +509,7 @@ public class FoodCard extends Card{
         }
     }
 
-    private void accessDairy2() {
+    private void accessDairy2(Player currentPlayer, Player[] turnOrder) {
 
     }
 
@@ -535,7 +539,7 @@ public class FoodCard extends Card{
         }
     }
     /**------------------------Wild-----------------------**/
-    private void accessWild(Player curentPlayer) {
+    private void accessWild(Player currentPlayer) {
 
     }
 }
