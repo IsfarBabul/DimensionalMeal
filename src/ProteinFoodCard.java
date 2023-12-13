@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ProteinFoodCard extends FoodCard{
-    public ProteinFoodCard(String name, Scanner scan) {
-        super(name, scan);
+    public ProteinFoodCard(String name, int level, Scanner scan) {
+        super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, Player[] turnOrder) {
+    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
         switch (level) {
             case 1 -> accessAbility1(currentPlayer, turnOrder);
             case 2 -> accessAbility2(currentPlayer, turnOrder);

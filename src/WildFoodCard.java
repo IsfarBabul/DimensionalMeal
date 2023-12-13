@@ -3,10 +3,11 @@ import java.util.Scanner;
 
 public class WildFoodCard extends FoodCard{
 
-    public WildFoodCard(String name, Scanner scan) {
-        super(name, scan);
+    public WildFoodCard(String name, int level, Scanner scan) {
+        super(name, level, scan);
     }
-    public void accessAbility(Player currentPlayer, ArrayList<FoodCard> foodDeck) {
+    @Override
+    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
         ArrayList<String> foodItems =  currentPlayer.getMealCard().getFoodItem();
         int itemsObtained = 0;
         boolean itemFound = false;
@@ -15,7 +16,7 @@ public class WildFoodCard extends FoodCard{
             int index = scan.nextInt();
             int count = 0;
             for (FoodCard food : foodDeck) {
-                if (food.getFoodName().equals(foodItems.get(index)) && !itemFound) {
+                if (food.getName().equals(foodItems.get(index)) && !itemFound) {
                     Utility.moveFoodCards(foodDeck, count, currentPlayer.getFoodHand());
                     count++;
                     itemFound = true;

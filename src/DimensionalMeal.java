@@ -140,17 +140,17 @@ public class DimensionalMeal {
             for (int i = 0; i < 10; i++) {
                 FoodCard foodCard = null;
                 switch (food) {
-                    case "\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11" -> foodCard = new FruitFoodCard(food, scan);
-                    case "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C" -> foodCard = new VegetableFoodCard(food, scan);
-                    case "\uD83E\uDD69", "\uD83C\uDF64" -> foodCard = new ProteinFoodCard(food, scan);
-                    case "\uD83C\uDF3E", "\uD83C\uDF5E" -> foodCard = new GrainsFoodCard(food, scan);
-                    case "\uD83E\uDDC0", "\uD83C\uDF76" -> foodCard = new DairyFoodCard(food, scan);
+                    case "\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11" -> foodCard = new FruitFoodCard(food, 0, scan);
+                    case "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C" -> foodCard = new VegetableFoodCard(food, 0, scan);
+                    case "\uD83E\uDD69", "\uD83C\uDF64" -> foodCard = new ProteinFoodCard(food, 0, scan);
+                    case "\uD83C\uDF3E", "\uD83C\uDF5E" -> foodCard = new GrainsFoodCard(food, 0, scan);
+                    case "\uD83E\uDDC0", "\uD83C\uDF76" -> foodCard = new DairyFoodCard(food, 0, scan);
                 }
                 foodDeck.add(foodCard);
             }
         }
         for (int i = 0; i < 8; i++) {
-            FoodCard foodCard = new FoodCard("\uD83C\uDF69", scan);
+            FoodCard foodCard = new WildFoodCard("\uD83C\uDF69", scan);
             foodDeck.add(foodCard);
         }
         shuffleFoodDeck();
@@ -158,11 +158,11 @@ public class DimensionalMeal {
     public void createDimensionDeck() {
         String[] dimensions = new String[]{"⚫", "┃", "⬛", "⛊", "☀"};
         for (int i = 0; i < 60; i++) {
-            DimensionCard dimensionCard = new DimensionCard(dimensions[0]);
+            DimensionCard dimensionCard = new DimensionCard(dimensions[0], 0);
             dimensionDeck.add(dimensionCard);
         }
         for (int i = 0; i < 20; i++) {
-            DimensionCard dimensionCard = new DimensionCard(dimensions[1]);
+            DimensionCard dimensionCard = new DimensionCard(dimensions[1],  1);
             dimensionDeck.add(dimensionCard);
         }
         shuffleDimensionDeck();

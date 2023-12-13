@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GrainsFoodCard extends FoodCard{
-    public GrainsFoodCard(String name, Scanner scan) {
-        super(name, scan);
+    public GrainsFoodCard(String name,  int level, Scanner scan) {
+        super(name, level, scan);
     }
     public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
         switch (level) {
@@ -75,11 +75,11 @@ public class GrainsFoodCard extends FoodCard{
         }
         StringBuilder cardOptions = new StringBuilder("[");
         for (FoodCard food : tempArray1) {
-            cardOptions.append(food.getFoodName()).append(", ");
+            cardOptions.append(food.getName()).append(", ");
         }
         for (DimensionCard dimension : tempArray2) {
-            cardOptions.append(dimension.getDimensionName());
-            if (!dimension.getDimensionName().equals(tempArray2.get(tempArray2.size() - 1).getDimensionName())) {
+            cardOptions.append(dimension.getName());
+            if (!dimension.getName().equals(tempArray2.get(tempArray2.size() - 1).getName())) {
                 cardOptions.append(", ");
             }
         }

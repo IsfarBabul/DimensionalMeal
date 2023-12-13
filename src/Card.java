@@ -1,15 +1,31 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public abstract class Card {
-    Scanner scan;
-    private String name;
-    private String type;
-    private String description;
-    private String instruction;
-    private int cost;
+    private final String name;
+    //private String type;
+    //private String description;
+    //private String instruction;
+    //private int cost;
     private int level;
-    public Card(String name, Scanner scan) { }
 
+    public Card(String name, int level) {
+        this.name = name;
+        this.level = level;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void incrementLevel() {
+        level++;
+    }
+
+    public abstract String accessDescription(int level);
+
+    public abstract String accessInstruction(int level);
+
+    public abstract String accessExample(int level);
 }

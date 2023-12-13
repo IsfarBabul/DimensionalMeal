@@ -2,15 +2,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DairyFoodCard extends FoodCard{
-    public DairyFoodCard(String name, Scanner scan) {
-        super(name, scan);
+    public DairyFoodCard(String name, int level, Scanner scan) {
+        super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, Player[] turnOrder) {
+    @Override
+    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
         switch (level) {
             case 1 -> accessAbility1(currentPlayer, turnOrder);
             case 2 -> accessAbility2(currentPlayer, turnOrder);
-            case 3 -> accessAbility3(currentPlayer, turnOrder);
-            case 4 -> accessAbility4(currentPlayer, turnOrder);
+            case 3 -> accessAbility3(currentPlayer, turnOrder, foodDiscard);
+            case 4 -> accessAbility4(currentPlayer, scan, turnOrder, dimensionDiscard);
         }
     }
     public String accessDescription(int level) {
@@ -48,7 +49,7 @@ public class DairyFoodCard extends FoodCard{
     }
 
     //------------PRIVATE METHODS-----------//
-    private void accessAbility1(Player currentPlayer, Player[] turnOrder) {
+    public void accessAbility1(Player currentPlayer, Player[] turnOrder) {
         Player opponent1 = Utility.chooseAnOpponent(scan, currentPlayer, turnOrder); // select opponent
         Player opponent2 = opponent1;
         while (opponent2 == opponent1 && turnOrder.length != 2) { // failsafe if both opponents r same
@@ -94,15 +95,15 @@ public class DairyFoodCard extends FoodCard{
         }
     }
 
-    private void accessAbility2(Player currentPlayer, Player[] turnOrder) {
+    public void accessAbility2(Player currentPlayer, Player[] turnOrder) {
 
     }
 
-    private void accessAbility3(Player currentPlayer, Player[] turnOrder, ArrayList<FoodCard> foodDiscard) {
+    public void accessAbility3(Player currentPlayer, Player[] turnOrder, ArrayList<FoodCard> foodDiscard) {
 
     }
 
-    private void accessAbility4(Player currentPlayer, Scanner scan, Player[] turnOrder, ArrayList<DimensionCard> dimensionDiscard) {
+    public void accessAbility4(Player currentPlayer, Scanner scan, Player[] turnOrder, ArrayList<DimensionCard> dimensionDiscard) {
         Player targetPlayer = Utility.chooseAnOpponent(scan, currentPlayer, turnOrder);
         for (int i = 0; i < targetPlayer.getDimensionHand().size(); i++) { // for each dimension card in that players hand
             if (targetPlayer.getDimensionLevel() >= targetPlayer.getDimensionHand().get(i).getDimensionLevel()) {

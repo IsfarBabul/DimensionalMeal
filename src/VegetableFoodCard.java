@@ -3,10 +3,10 @@ import java.util.Scanner;
 
 public class VegetableFoodCard extends FoodCard{
 
-    public VegetableFoodCard(String name, Scanner scan) {
-        super(name, scan);
+    public VegetableFoodCard(String name, int level, Scanner scan) {
+        super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, Player[] turnOrder) {
+    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
         switch (level) {
             case 1 -> accessAbility1(currentPlayer, dimensionDeck);
             case 2 -> accessAbility2(currentPlayer, dimensionDeck);
