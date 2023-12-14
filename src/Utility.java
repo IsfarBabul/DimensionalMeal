@@ -1,21 +1,14 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Utility {
-    private Utility() { };
-    public static void moveDimensionCards(ArrayList<DimensionCard> giftingDeck, int giftingIndex, ArrayList<DimensionCard> receivingDeck, int receivingIndex) {
+    private Utility() { }
+    public static void moveCards(ArrayList<Card> giftingDeck, int giftingIndex, ArrayList<Card> receivingDeck, int receivingIndex) {
         receivingDeck.add(receivingIndex, giftingDeck.get(giftingIndex));
         giftingDeck.remove(giftingDeck.get(giftingIndex));
     }
-    public static void moveDimensionCards(ArrayList<DimensionCard> giftingDeck, int giftingIndex, ArrayList<DimensionCard> receivingDeck) {
-        receivingDeck.add(giftingDeck.get(giftingIndex));
-        giftingDeck.remove(giftingDeck.get(giftingIndex));
-    }
-    public static void moveFoodCards(ArrayList<FoodCard> giftingDeck, int giftingIndex, ArrayList<FoodCard> receivingDeck, int receivingIndex) {
-        receivingDeck.add(receivingIndex, giftingDeck.get(giftingIndex));
-        giftingDeck.remove(giftingDeck.get(giftingIndex));
-    }
-    public static void moveFoodCards(ArrayList<FoodCard> giftingDeck, int giftingIndex, ArrayList<FoodCard> receivingDeck) {
+    public static void moveCards(ArrayList<Card> giftingDeck, int giftingIndex, ArrayList<Card> receivingDeck) {
         receivingDeck.add(giftingDeck.get(giftingIndex));
         giftingDeck.remove(giftingDeck.get(giftingIndex));
     }
@@ -37,38 +30,39 @@ public class Utility {
         }
         return targetPlayer;
     }
-    public static boolean dimensionOrFood() {
-        return (int) (Math.random() * 2) == 0;
-    }
-    public static Player[] identifyNextTurnOrder(Player[] turnOrder) {
-        Player[] nextOrder = new Player[turnOrder.length];
-        int count = 1;
-        for (Player player : turnOrder) {
-            if (count == turnOrder.length) {
-                count = 0;
-            }
-            turnOrder[count] = player;
+    /*public static boolean determineRandomCard(ArrayList<Card> deck) {
+        Player targetPlayer = Utility.chooseAnOpponent(scan, currentPlayer, turnOrder);
+        int cardIndex = (int) (Math.random() * (targetPlayer.getHand().size() + 1));
+        if(targetPlayer.getHand().get(cardIndex) instanceof DimensionCard) {
+            Utility.moveCards(targetPlayer.getHand(), cardIndex, dimensionDiscard);
+        } else {
+            Utility.moveCards(targetPlayer.getHand(), cardIndex, foodDiscard);
         }
-        return nextOrder;
-    }
-    /*public static ArrayList<FoodCard> collectFoodCards(Player currentPlayer, ArrayList<FoodCard> foodDeck, Player[] turnOrder) {
-        ArrayList<FoodCard> tempArray = new ArrayList<>(0);
-        for (Player player : turnOrder) {
-            if (!player.equals(currentPlayer)) {
-                int food = (int) (Math.random() * (foodDeck.size() + 1));
-                Utility.moveFoodCards(player.getFoodHand(), food, tempArray);
-            }
-        }
-        return tempArray;
-    }
-    public static ArrayList<DimensionCard> collectDimensionCards(Player currentPlayer, ArrayList<DimensionCard> foodDeck, Player[] turnOrder) {
-        ArrayList<DimensionCard> tempArray = new ArrayList<>(0);
-        for (Player player : turnOrder) {
-            if (!player.equals(currentPlayer)) {
-                int food = (int) (Math.random() * (foodDeck.size() + 1));
-                Utility.moveDimensionCards(player.getDimensionHand(), food, tempArray);
-            }
-        }
-        return tempArray;
     }*/
+    public static void printElementNames(ArrayList<Card> deck) {
+        System.out.print("[");
+        for (int i = 0; i < deck.size() - 1; i++) {
+            System.out.print(deck.get(i).getName() + ", ");
+        }
+        System.out.print(deck.get(deck.size() - 1) + "]");
+    }
+    public static void printElementNames(Card[] deck) {
+        System.out.print("[");
+        for (int i = 0; i < deck.length - 1; i++) {
+            System.out.print(deck[i].getName() + ", ");
+        }
+        System.out.print(deck[deck.length - 1] + "]");
+    }
+    public static void clearWindow() {
+        try {
+            String operatingSystem = System.getProperty("os.name");
+            if (operatingSystem.contains("Windows")) {
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
+                Process startProcess = pb.inheritIO().start();
+                startProcess.waitFor();
+            }
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Issue found with clearing the window: " + e.getMessage());
+        }
+    }
 }

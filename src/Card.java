@@ -1,9 +1,5 @@
 public abstract class Card {
     private final String name;
-    //private String type;
-    //private String description;
-    //private String instruction;
-    //private int cost;
     private int level;
 
     public Card(String name, int level) {

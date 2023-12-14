@@ -6,7 +6,7 @@ public class FruitFoodCard extends FoodCard{
         super(name, level, scan);
     }
     @Override
-    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
+    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
         switch (level) {
             case 1 -> accessAbility1(currentPlayer);
             case 2 -> accessAbility2(currentPlayer);

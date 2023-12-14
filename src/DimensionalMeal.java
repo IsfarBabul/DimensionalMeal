@@ -2,60 +2,48 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class DimensionalMeal {
     private Scanner scan;
-    private ArrayList<FoodCard> foodDeck;
-    private ArrayList<FoodCard> foodDiscard;
-    private ArrayList<DimensionCard> dimensionDeck;
-    private ArrayList<DimensionCard> dimensionDiscard;
-    private ArrayList<MealCard> mealDeck;
-    private ArrayList<MealCard> mealDiscard;
+    private ArrayList<Card> foodDeck;
+    private ArrayList<Card> foodDiscard;
+    private ArrayList<Card> dimensionDeck;
+    private ArrayList<Card> dimensionDiscard;
+    private ArrayList<Card> mealDeck;
+    private ArrayList<Card> mealDiscard;
+    private ArrayList<Card> mealCardSuspension;
     private Player[] turnOrder;
     private int orderIndex;
     private int completeTurns;
     private Player currentPlayer;
     private boolean win;
     public DimensionalMeal() {
-        foodDeck = new ArrayList<FoodCard>();
-        foodDiscard = new ArrayList<FoodCard>();
-        dimensionDeck = new ArrayList<DimensionCard>();
-        dimensionDiscard = new ArrayList<DimensionCard>();
-        mealDeck = new ArrayList<MealCard>();
-        mealDiscard = new ArrayList<MealCard>();
+        foodDeck = new ArrayList<>();
+        foodDiscard = new ArrayList<>();
+        dimensionDeck = new ArrayList<>();
+        dimensionDiscard = new ArrayList<>();
+        mealDeck = new ArrayList<>();
+        mealDiscard = new ArrayList<>();
+        mealCardSuspension = new ArrayList<>();
         orderIndex = 0;
         win = false;
     }
-    public void start(Scanner scan) {
+    public void run(Scanner scan) {
         this.scan = scan;
-        setup();
-        while (!win) {
-            currentPlayer.increaseActions(4);
-            currentPlayer.increaseActions(currentPlayer.getNextTurnActions());
-            currentPlayer.setNextTurnActions(0);
-            if (currentPlayer.getActionsLeft() < 0) {
-                System.out.println("You still have less than 0 actions. You lose your turn.");
-            }
-            while (currentPlayer.getActionsLeft() > 0) {
-                loadGUI(turnOrder[0]);
-                int option = scan.nextInt();
-                optionOutcome(option);
-            }
-            orderIndex++;
-            if(orderIndex == turnOrder.length) {
-                completeTurns++;
-                orderIndex = 0;
-            }
-            currentPlayer = turnOrder[orderIndex];
-        }
+        start();
+        game();
     }
-    private void setup() {
+    //-----------------------------!!!!!!!!!!!!!!-------------------PRIVATE METHODS-------------------!!!!!!!!!!!!!!!!!------------------------------------any code below this threshold must be private--------------------
+    private void start() {
         createPlayers();
         createFoodDeck();
         createDimensionDeck();
-        for (Player player : turnOrder) {
-            giveMealCard(player);
+        createMealDeck();
+        for (int i = 0; i < turnOrder.length; i++) {
+            turnOrder[i].setMealCard((MealCard) mealDeck.get(0));
+            turnOrder[i].getMealCard().setName(turnOrder[i].getPlayerName() + "'s Meal Card");
+            Utility.moveCards(mealDeck, 0, mealCardSuspension, i);
         }
         currentPlayer = turnOrder[0];
     }
-    public void loadGUI(Player currentPlayer) {
+    private void loadGUI(Player currentPlayer) {
         System.out.println("\uD83C\uDFB4(65) - Dimension Deck              \uD83D\uDDC2️(3) - Dimension Discard");
         System.out.println();
         System.out.println("\uD83E\uDDFA(69) - Food Deck(it's a basket)    \uD83D\uDDD1\uFE0F(7) - Food Discard");
@@ -89,10 +77,45 @@ public class DimensionalMeal {
         System.out.println();
         System.out.println("Enter an Option:");
     }
-    //-----------------------------!!!!!!!!!!!!!!-------------------PRIVATE METHODS-------------------!!!!!!!!!!!!!!!!!------------------------------------any code below this threshold must be private--------------------
+    private void game() {
+        while (!win) {
+            currentPlayer.increaseActions(4);
+            currentPlayer.increaseActions(currentPlayer.getNextTurnActions());
+            currentPlayer.setNextTurnActions(0);
+            if (currentPlayer.getActionsLeft() < 0) {
+                System.out.println("You still have less than 0 actions. You lose your turn.");
+            }
+            while (currentPlayer.getActionsLeft() > 0) {
+                loadGUI(turnOrder[0]);
+                int option = scan.nextInt();
+                optionOutcome(option);
+            }
+            orderIndex++;
+            if(orderIndex == turnOrder.length) {
+                completeTurns++;
+                orderIndex = 0;
+            }
+            currentPlayer = turnOrder[orderIndex];
+        }
+        pauseSwap(currentPlayer, turnOrder);
+    }
+    private void pauseSwap(Player currentPlayer, Player[] turnOrder) {
+        Utility.clearWindow();
+        Player prevPlayer = null;
+        for(int i = 1; i < turnOrder.length; i++) {
+            if (turnOrder[i].equals(currentPlayer)) {
+                prevPlayer = turnOrder[i - 1];
+            }
+        }
+        if (prevPlayer == null) {
+            prevPlayer = turnOrder[turnOrder.length - 1];
+        }
+        System.out.println("Allow time for " + prevPlayer.getPlayerName() + " to swap places with " + currentPlayer + " to prevent players from looking at each others' data.");
+        Utility.clearWindow();
+    }
     private void shuffleMealDeck() {
         int lengthOfArray = mealDeck.size();
-        ArrayList<MealCard> newDeck = new ArrayList<>(lengthOfArray);
+        ArrayList<Card> newDeck = new ArrayList<>(lengthOfArray);
         while(!mealDeck.isEmpty()) {
             int randNum = (int) (Math.random() * (lengthOfArray - 1));
             newDeck.add(mealDeck.get(randNum));
@@ -103,7 +126,7 @@ public class DimensionalMeal {
     }
     private void shuffleDimensionDeck() {
         int lengthOfArray = dimensionDeck.size();
-        ArrayList<DimensionCard> newDeck = new ArrayList<>(lengthOfArray);
+        ArrayList<Card> newDeck = new ArrayList<>(lengthOfArray);
         while(!dimensionDeck.isEmpty()) {
             int randNum = (int) (Math.random() * (lengthOfArray - 1));
             newDeck.add(dimensionDeck.get(randNum));
@@ -114,7 +137,7 @@ public class DimensionalMeal {
     }
     private void shuffleFoodDeck() {
         int lengthOfArray = foodDeck.size();
-        ArrayList<FoodCard> newDeck = new ArrayList<>(lengthOfArray);
+        ArrayList<Card> newDeck = new ArrayList<>(lengthOfArray);
         while(!foodDeck.isEmpty()) {
             int randNum = (int) (Math.random() * (lengthOfArray - 1));
             newDeck.add(foodDeck.get(randNum));
@@ -150,12 +173,12 @@ public class DimensionalMeal {
             }
         }
         for (int i = 0; i < 8; i++) {
-            FoodCard foodCard = new WildFoodCard("\uD83C\uDF69", scan);
+            FoodCard foodCard = new WildFoodCard("\uD83C\uDF69", 0, scan);
             foodDeck.add(foodCard);
         }
         shuffleFoodDeck();
     }
-    public void createDimensionDeck() {
+    private void createDimensionDeck() {
         String[] dimensions = new String[]{"⚫", "┃", "⬛", "⛊", "☀"};
         for (int i = 0; i < 60; i++) {
             DimensionCard dimensionCard = new DimensionCard(dimensions[0], 0);
@@ -167,13 +190,13 @@ public class DimensionalMeal {
         }
         shuffleDimensionDeck();
     }
-    public void createMealDeck(Player player) {
-        String[] foods = new String[]{"\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11", "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C", "\uD83E\uDD69", "\uD83C\uDF64", "\uD83C\uDF3E", "\uD83C\uDF5E", "\uD83E\uDDC0", "\uD83C\uDF76"};
-        for (String food : foods) {
-
+    private void createMealDeck() {
+        for (int i = 0; i < 20; i++) {
+            MealCard mealCard = new MealCard(null, 0);
+            mealDeck.add(mealCard);
         }
     }
-    public void optionOutcome(int outcome) {
+    private void optionOutcome(int outcome) {
         switch (outcome) {
             case 0 -> playFoodCard();  // 3/5
             case 1 -> buyFoodCard();       // 1/5
@@ -187,5 +210,6 @@ public class DimensionalMeal {
             case 9 -> upgradeFoodCard();           // 3/5
         }
     }
+
 }
 

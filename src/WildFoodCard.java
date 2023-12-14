@@ -7,7 +7,7 @@ public class WildFoodCard extends FoodCard{
         super(name, level, scan);
     }
     @Override
-    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
+    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
         ArrayList<String> foodItems =  currentPlayer.getMealCard().getFoodItem();
         int itemsObtained = 0;
         boolean itemFound = false;
@@ -15,9 +15,9 @@ public class WildFoodCard extends FoodCard{
             System.out.println("Choose from the available options by typing a number starting from index 0: " + foodItems);
             int index = scan.nextInt();
             int count = 0;
-            for (FoodCard food : foodDeck) {
+            for (Card food : foodDeck) {
                 if (food.getName().equals(foodItems.get(index)) && !itemFound) {
-                    Utility.moveFoodCards(foodDeck, count, currentPlayer.getFoodHand());
+                    Utility.moveCards(foodDeck, count, currentPlayer.getHand());
                     count++;
                     itemFound = true;
                 }

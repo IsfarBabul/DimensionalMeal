@@ -14,28 +14,26 @@ public abstract class FoodCard extends Card {
     /**
      * ------------------------Zero-----------------------
      **/
-    private void access0(Player currentPlayer, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard) {
+    private void access0(Player currentPlayer, ArrayList<Card> foodDeck, ArrayList<FoodCard> foodDiscard) {
         int count = 0;
         boolean alreadyReceived = false;
-        for (FoodCard food : foodDeck) {
+        for (Card food : foodDeck) {
             if (food.getName().equals(foodDiscard.get(0).getName()) && !alreadyReceived) {
-                Utility.moveFoodCards(foodDeck, count, currentPlayer.getFoodHand());
+                Utility.moveCards(foodDeck, count, currentPlayer.getHand());
                 alreadyReceived = true;
             }
             count++;
         }
     }
 
-    public abstract void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder);
+    public abstract void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder);
 
-    @Override
     public abstract String accessDescription(int level);
 
-    @Override
     public abstract String accessInstruction(int level);
 
-    @Override
     public abstract String accessExample(int level);
+
     public abstract int accessCost(int level);
 
 }

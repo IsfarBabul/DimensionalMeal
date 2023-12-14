@@ -5,11 +5,10 @@ public class DairyFoodCard extends FoodCard{
     public DairyFoodCard(String name, int level, Scanner scan) {
         super(name, level, scan);
     }
-    @Override
-    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
+    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
         switch (level) {
             case 1 -> accessAbility1(currentPlayer, turnOrder);
-            case 2 -> accessAbility2(currentPlayer, turnOrder);
+            case 2 -> accessAbility2(turnOrder);
             case 3 -> accessAbility3(currentPlayer, turnOrder, foodDiscard);
             case 4 -> accessAbility4(currentPlayer, scan, turnOrder, dimensionDiscard);
         }
@@ -29,7 +28,7 @@ public class DairyFoodCard extends FoodCard{
         switch (level) {
             case 1 -> string = "1. Choose two opponents(or you and your opponent for 1v1s)\n2. A random card from each player will be given to the other player";
             case 2 -> string = "1. One random card is chosen per player(including you) \n2. This card is given to the next person in turn order";
-            case 3 -> string = "1. Look at your Dimension level\n2. Choose one Food card you have(required)\n3. Choose an opponent\n4. They must discard a number Food cards of that type up to your one more than your level";
+            case 3 -> string = "1. Look at your Dimension level\n2. Choose one Food card you have(required to activate ability otherwise it does nothing and you wasted a card)\n3. Choose an opponent\n4. They must discard a number Food cards of that type up to your one more than your level";
             case 4 -> string = "1. Look at your Dimension level\n2. Choose an opponent\n3. They must discard all Dimension cards below that level\n4. If they discard all dimension cards this way they must discard their current meal card and draw a new one";
         }
         return string;
@@ -39,7 +38,7 @@ public class DairyFoodCard extends FoodCard{
         switch (level) {
             case 1 -> string = "Pick two players besides yourself.\nEach player picks a random card and must give it to the other player.\nIn 2-player matches, you swap with your opponent.";
             case 2 -> string = "EVERY player chooses a random card.\nEach card is given to the next player that would get their turn after the player giving the card would end their turn.";
-            case 3 -> string = "Check your Dimension level and if you have have a Food card.\nIf so then choose a player besides yourself.\nThey must move all Food cards in their hand to the Food discard pile.";
+            case 3 -> string = "Check your Dimension level and if you have have a Food card.\nIf so then choose a player besides yourself.\nThey must move all Food cards of the same name in their hand to the Food discard pile.";
             case 4 -> string = "Check your Dimension level and choose a player besides yourself.\nThey must discard all Dimension cards up to one less than your level\nIf all Dimension cards are discard this way, that player must discard their meal card and draw a new one.";
         }
         return string;
@@ -58,56 +57,52 @@ public class DairyFoodCard extends FoodCard{
         if (turnOrder.length == 2) {   //failsafe if only 2 players
             opponent2 = currentPlayer;
         }
-        Player[] specifiedOrder = new Player[2];
-        String[] orderMarker = {"dimension", "dimension"};
-        specifiedOrder[0] = opponent1;
-        specifiedOrder[1] = opponent2;
-        ArrayList<DimensionCard> tempArray1 = new ArrayList<>(0);
-        ArrayList<FoodCard> tempArray2 = new ArrayList<>(0);
-        for (int i = 0; i <= 1; i++) {
-            if(Utility.dimensionOrFood() && !specifiedOrder[0].getDimensionHand().isEmpty()) {
-                int dimension = (int) (Math.random() * (specifiedOrder[0].getDimensionHand().size() - 1));
-                Utility.moveDimensionCards(opponent1.getDimensionHand(), dimension, tempArray1);
-            } else {
-                int food = (int) (Math.random() * (specifiedOrder[0].getFoodHand().size() - 1));
-                Utility.moveFoodCards(opponent1.getFoodHand(), food, tempArray2);
-                orderMarker[i] = "food";
-            }
-            specifiedOrder = Utility.identifyNextTurnOrder(specifiedOrder);
+        int cardIndex1 = (int) (Math.random() * (opponent1.getHand().size() + 1));
+        int cardIndex2 = (int) (Math.random() * (opponent2.getHand().size() + 1));
+        Utility.moveCards(opponent1.getHand(), cardIndex1, opponent2.getHand());
+        Utility.moveCards(opponent2.getHand(), cardIndex2, opponent1.getHand());
+    }
+
+    public void accessAbility2(Player[] turnOrder) {
+        int[] cardIndexChosen = new int[turnOrder.length];
+        for (int i = 0; i < turnOrder.length; i++) {
+            cardIndexChosen[i] = (int) (Math.random() * (turnOrder[i].getHand().size() + 1));
         }
-        Player[] nextOrder = Utility.identifyNextTurnOrder(specifiedOrder);
-        if (orderMarker[0].equals(orderMarker[1])) {
-            for (int i = 0; i <= 1; i++) {
-                if (orderMarker[0].equals("dimension")) {
-                    Utility.moveDimensionCards(tempArray1, i, nextOrder[i].getDimensionHand());
-                } else {
-                    Utility.moveFoodCards(tempArray2, i, nextOrder[i].getFoodHand());
+        for (int i = 0; i < turnOrder.length - 1; i++) {
+            Utility.moveCards(turnOrder[i].getHand(), cardIndexChosen[i], turnOrder[i + 1].getHand());
+        }
+        Utility.moveCards(turnOrder[turnOrder.length - 1].getHand(), cardIndexChosen[cardIndexChosen.length - 1], turnOrder[0].getHand());
+    }
+
+    public void accessAbility3(Player currentPlayer, Player[] turnOrder, ArrayList<Card> foodDiscard) {
+        boolean hasFoodCard = false;
+        ArrayList<Card> foodCards = new ArrayList<>(0);
+        for (Card card : currentPlayer.getHand()) {
+            if (card instanceof FoodCard) {
+                hasFoodCard = true;
+                foodCards.add(card);
+            }
+        }
+        if (hasFoodCard) {
+            System.out.println("Choose a Food card in your hand (from index 0 onward): ");
+            Utility.printElementNames(foodCards);
+            int index = scan.nextInt();
+            Player targetPlayer = Utility.chooseAnOpponent(scan, currentPlayer, turnOrder);
+            int count = 0;
+            for (Card card : targetPlayer.getHand()) {
+                if (card.getName().equals(currentPlayer.getHand().get(index).getName())) {
+                    Utility.moveCards(targetPlayer.getHand(), count, foodDiscard);
                 }
-            }
-        } else {
-            if (orderMarker[0].equals("dimension")) {
-                Utility.moveDimensionCards(tempArray1, 0, nextOrder[0].getDimensionHand());
-                Utility.moveFoodCards(tempArray2, 0, nextOrder[1].getFoodHand());
-            } else {
-                Utility.moveDimensionCards(tempArray1, 0, nextOrder[1].getDimensionHand());
-                Utility.moveFoodCards(tempArray2, 0, nextOrder[0].getFoodHand());
+                count++;
             }
         }
     }
 
-    public void accessAbility2(Player currentPlayer, Player[] turnOrder) {
-
-    }
-
-    public void accessAbility3(Player currentPlayer, Player[] turnOrder, ArrayList<FoodCard> foodDiscard) {
-
-    }
-
-    public void accessAbility4(Player currentPlayer, Scanner scan, Player[] turnOrder, ArrayList<DimensionCard> dimensionDiscard) {
+    public void accessAbility4(Player currentPlayer, Scanner scan, Player[] turnOrder, ArrayList<Card> dimensionDiscard) {
         Player targetPlayer = Utility.chooseAnOpponent(scan, currentPlayer, turnOrder);
-        for (int i = 0; i < targetPlayer.getDimensionHand().size(); i++) { // for each dimension card in that players hand
-            if (targetPlayer.getDimensionLevel() >= targetPlayer.getDimensionHand().get(i).getDimensionLevel()) {
-                Utility.moveDimensionCards(targetPlayer.getDimensionHand(), i, dimensionDiscard, 0);
+        for (int i = 0; i < targetPlayer.getHand().size(); i++) { // for each dimension card in that players hand
+            if (targetPlayer.getDimensionLevel() >= targetPlayer.getHand().get(i).getLevel()) {
+                Utility.moveCards(targetPlayer.getHand(), i, dimensionDiscard, 0);
             }
         }
     }

@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 
-public class MealCard {
+public class MealCard extends Card{
+   private String name;
    private int level;
    public ArrayList<String> foodItem;
    private final ArrayList<Integer> multipliers;
-   private ArrayList<ArrayList<String>> mealRequirements = new ArrayList<ArrayList<String>>(0);
-   public MealCard(int level) {
-       this.level = level;
+   private ArrayList<ArrayList<String>> mealRequirements = new ArrayList<>(0);
+   public MealCard(String name, int level) {
+       super(name, level);
        foodItem = new ArrayList<>(0);
        multipliers = new ArrayList<>(0);
        mealRequirements = makeMealRequirements(mealRequirements);
@@ -57,5 +58,21 @@ public class MealCard {
     public void setLevel(int level) {
         this.level = level;
         obtainCurrentRequirements(level);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String accessDescription(int level) {
+        return null;
+    }
+
+    public String accessInstruction(int level) {
+        return null;
+    }
+
+    public String accessExample(int level) {
+        return null;
     }
 }

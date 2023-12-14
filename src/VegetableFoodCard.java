@@ -6,7 +6,7 @@ public class VegetableFoodCard extends FoodCard{
     public VegetableFoodCard(String name, int level, Scanner scan) {
         super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
+    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
         switch (level) {
             case 1 -> accessAbility1(currentPlayer, dimensionDeck);
             case 2 -> accessAbility2(currentPlayer, dimensionDeck);
@@ -49,29 +49,29 @@ public class VegetableFoodCard extends FoodCard{
     }
 
     //------------PRIVATE METHODS-----------//
-    private void accessAbility1(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck) {
-        Utility.moveDimensionCards(dimensionDeck, 0, currentPlayer.getDimensionHand(),0);
+    private void accessAbility1(Player currentPlayer, ArrayList<Card> dimensionDeck) {
+        Utility.moveCards(dimensionDeck, 0, currentPlayer.getHand(),0);
     }
 
-    private void accessAbility2(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck) {
+    private void accessAbility2(Player currentPlayer, ArrayList<Card> dimensionDeck) {
         for (int i = 0; i <= 2; i++) {
-            Utility.moveDimensionCards(dimensionDeck, 0, currentPlayer.getDimensionHand(),0);
+            Utility.moveCards(dimensionDeck, 0, currentPlayer.getHand(),0);
         }
     }
 
-    private void accessAbility3(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck) {
+    private void accessAbility3(Player currentPlayer, ArrayList<Card> dimensionDeck) {
         for (int i = 0; i <= 4; i++) {
-            Utility.moveDimensionCards(dimensionDeck, 0, currentPlayer.getDimensionHand(),0);
+            Utility.moveCards(dimensionDeck, 0, currentPlayer.getHand(),0);
         }
     }
 
-    private void accessAbility4(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, Player[] turnOrder) {
+    private void accessAbility4(Player currentPlayer, ArrayList<Card> dimensionDeck, Player[] turnOrder) {
         for (int i = 0; i <= 4; i++) {
-            Utility.moveDimensionCards(dimensionDeck, 0, currentPlayer.getDimensionHand(),0);
+            Utility.moveCards(dimensionDeck, 0, currentPlayer.getHand(),0);
         }
         for (int i = 0; i <= 2; i++) {
             for (Player player :turnOrder) {
-                Utility.moveDimensionCards(dimensionDeck, 0, player.getDimensionHand(), 0);
+                Utility.moveCards(dimensionDeck, 0, player.getHand(), 0);
             }
         }
     }

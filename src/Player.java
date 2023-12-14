@@ -2,8 +2,7 @@ import java.util.ArrayList;
 
 public class Player {
     private final String playerName;
-    private ArrayList<FoodCard> foodHand;
-    private ArrayList<DimensionCard> dimensionHand;
+    private ArrayList<Card> hand;
     private MealCard mealCard;
     private int dimensionLevel;
     private int actionsLeft;
@@ -25,12 +24,8 @@ public class Player {
         return playerName;
     }
 
-    public ArrayList<FoodCard> getFoodHand() {
-        return foodHand;
-    }
-
-    public ArrayList<DimensionCard> getDimensionHand() {
-        return dimensionHand;
+    public ArrayList<Card> getHand() {
+        return hand;
     }
 
     public int getDimensionLevel() {
@@ -77,8 +72,7 @@ public class Player {
         nextTurnActions -= decrement;
     }
     private void initializeInstances() {
-        foodHand = new ArrayList<>(0);
-        dimensionHand = new ArrayList<>(0);
+        hand = new ArrayList<>(0);
         dimensionLevel = 0;
         actionsLeft = 0;
     }

@@ -17,7 +17,11 @@ public class DimensionCard extends Card{
 
 
     public String accessExample(int level) {
-        String[] instructor = {"1. Fuse two points to make a line\n2. Enhance fuse four points to make a plane", "1. Fuse two lines to make a plane\n2. Enhance fuse four lines to make a space", "1. Fuse two planes to make a space\n2. Enhance fuse four points to make a spacetime", "1. Fuse two spaces to make a spacetime\n2. No enhanced fusions available", "1. Too Unstable to fuse\n2. Enhanced fusion is catastrophic"};
+        String[] instructor = {"1. You have two Dimension Point cards, spend 1 action to fuse them, and gain a Dimension Line card\n2. You have four Dimension Point cards, spend 3 actions to fuse them, and gain a Dimension Plane card",
+                               "1. You have two Dimension Line cards, spend 2 action to fuse them, and gain a Dimension Line card\n2. You have four Dimension Point cards, spend 4 actions to fuse them, and gain a Dimension Plane card",
+                               "1. You have two Dimension Plane cards, spend 3 action to fuse them, and gain a Dimension Line card\n2. You have four Dimension Point cards, spend 5 actions to fuse them, and gain a Dimension Plane card",
+                               "1. You have two Dimension Space cards, spend 4 action to fuse them, and gain a Dimension Line card\n2. This would cause a minor chaos implosion",
+                               "1. Fusing these powerful things causes a minor chaos explosion\n2. CATASTROPHIC CHAOS BANG - theorized to have caused the Big Bang of the universe"};
         return instructor[level];
     }
 }

@@ -5,10 +5,10 @@ public class GrainsFoodCard extends FoodCard{
     public GrainsFoodCard(String name,  int level, Scanner scan) {
         super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
+    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
         switch (level) {
-            case 1 -> accessAbility1(currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder);
-            case 2 -> accessAbility2(currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder);
+            case 1 -> accessAbility1(currentPlayer, dimensionDiscard, foodDiscard, turnOrder);
+            case 2 -> accessAbility2(currentPlayer, dimensionDiscard, foodDiscard, turnOrder);
             case 3 -> accessAbility3(currentPlayer, dimensionDeck, foodDeck, turnOrder);
             case 4 -> accessAbility4(currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder);
         }
@@ -48,184 +48,149 @@ public class GrainsFoodCard extends FoodCard{
     }
 
     //------------PRIVATE METHODS-----------//
-    private void accessAbility1(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
+    private void accessAbility1(Player currentPlayer, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDiscard, Player[] turnOrder) {
         Player targetPlayer = Utility.chooseAnOpponent(scan, currentPlayer, turnOrder);
-        if(Utility.dimensionOrFood()) {
-            int dimension = (int) (Math.random() * (dimensionDeck.size() + 1));
-            Utility.moveDimensionCards(targetPlayer.getDimensionHand(), dimension, dimensionDiscard);
+        int cardIndex = (int) (Math.random() * (targetPlayer.getHand().size() + 1));
+        if(targetPlayer.getHand().get(cardIndex) instanceof DimensionCard) {
+            Utility.moveCards(targetPlayer.getHand(), cardIndex, dimensionDiscard);
         } else {
-            int food = (int) (Math.random() * (foodDeck.size() + 1));
-            Utility.moveFoodCards(targetPlayer.getFoodHand(), food, foodDiscard);
+            Utility.moveCards(targetPlayer.getHand(), cardIndex, foodDiscard);
         }
     }
 
-    private void accessAbility2(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
-        ArrayList<FoodCard> tempArray1 = new ArrayList<>(0);
-        ArrayList<DimensionCard> tempArray2 = new ArrayList<>(0);
+    private void accessAbility2(Player currentPlayer, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDiscard, Player[] turnOrder) {
+        ArrayList<Card> tempArray = new ArrayList<>(0);
         for (Player player : turnOrder) {
             if (!player.equals(currentPlayer)) {
-                if (Utility.dimensionOrFood()) {
-                    int dimension = (int) (Math.random() * (dimensionDeck.size() + 1));
-                    Utility.moveDimensionCards(player.getDimensionHand(), dimension, tempArray2);
-                } else {
-                    int food = (int) (Math.random() * (foodDeck.size() + 1));
-                    Utility.moveFoodCards(player.getFoodHand(), food, tempArray1);
-                }
+                int dimension = (int) (Math.random() * (player.getHand().size() + 1));
+                Utility.moveCards(player.getHand(), dimension, tempArray);
             }
         }
         StringBuilder cardOptions = new StringBuilder("[");
-        for (FoodCard food : tempArray1) {
-            cardOptions.append(food.getName()).append(", ");
-        }
-        for (DimensionCard dimension : tempArray2) {
-            cardOptions.append(dimension.getName());
-            if (!dimension.getName().equals(tempArray2.get(tempArray2.size() - 1).getName())) {
+        for (Card item : tempArray) {
+            cardOptions.append(item.getName()).append(", ");
+            if (!item.getName().equals(tempArray.get(tempArray.size() - 1).getName())) {
                 cardOptions.append(", ");
             }
         }
         cardOptions.append("]");
         System.out.print("Among this list: " + cardOptions + ", type an index number corresponding to the item from left to right starting from 0: ");
         int index = scan.nextInt();
-        if (index < tempArray1.size()) {
-            Utility.moveFoodCards(tempArray1, index, currentPlayer.getFoodHand());
-        } else {
-            index -= tempArray1.size();
-            Utility.moveDimensionCards(tempArray2, index, currentPlayer.getDimensionHand());
+        if (index < tempArray.size()) {
+            Utility.moveCards(tempArray, index, currentPlayer.getHand());
+            Utility.moveCards(tempArray, index, foodDiscard);
+            Utility.moveCards(tempArray, index, dimensionDiscard);
         }
-        Utility.moveFoodCards(tempArray1, index, foodDiscard);
-        Utility.moveDimensionCards(tempArray2, index, dimensionDiscard);
+        for (int i = 0; i < tempArray.size(); i++) {
+            if (tempArray.get(i) instanceof FoodCard) {
+                Utility.moveCards(tempArray, i, foodDiscard);
+            } else {
+                Utility.moveCards(tempArray, i, dimensionDiscard);
+            }
+        }
     }
 
-    private void accessAbility3(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<FoodCard> foodDeck, Player[] turnOrder) {
-        ArrayList<FoodCard> tempArray1 = new ArrayList<>(0);
-        ArrayList<DimensionCard> tempArray2 = new ArrayList<>(0);
+    private void accessAbility3(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> foodDeck, Player[] turnOrder) {
+        ArrayList<Card> tempArray = new ArrayList<>(0);
         for (Player player : turnOrder) {
             if (!player.equals(currentPlayer)) {
-                if (Utility.dimensionOrFood()) {
-                    int dimension = (int) (Math.random() * (dimensionDeck.size() + 1));
-                    Utility.moveDimensionCards(player.getDimensionHand(), dimension, tempArray2);
-                } else {
-                    int food = (int) (Math.random() * (foodDeck.size() + 1));
-                    Utility.moveFoodCards(player.getFoodHand(), food, tempArray1);
-                }
+                int dimension = (int) (Math.random() * (dimensionDeck.size() + 1));
+                Utility.moveCards(player.getHand(), dimension, tempArray);
+            }
+        }
+        ArrayList<Card> tempArray1 = new ArrayList<>(0);
+        ArrayList<Card> tempArray2 = new ArrayList<>(0);
+        for (Card card : tempArray) {
+            if (card instanceof FoodCard) {
+                tempArray1.add(card);
+            } else {
+                tempArray2.add(card);
             }
         }
         StringBuilder cardOptions = new StringBuilder("[");
-        for (FoodCard food : tempArray1) {
-            cardOptions.append(food.getFoodName());
-            if (!food.getFoodName().equals(tempArray1.get(tempArray1.size() - 1).getFoodName())) {
+        for (Card food : tempArray) {
+            cardOptions.append(food.getName());
+            if (!food.getName().equals(tempArray1.get(tempArray1.size() - 1).getName())) {
                 cardOptions.append(", ");
             }
             cardOptions.append("]");
         }
         System.out.println("These are the Food cards obtained: " + cardOptions);
         System.out.println("Choose what order to place them on the deck from the top(which is 0) to bottom(the # of cards there are minus 1)");
-        ArrayList<FoodCard> tempArray3 = new ArrayList<>(tempArray1.size());
-        for (FoodCard foodCard : tempArray1) {
+        ArrayList<Card> tempArray3 = new ArrayList<>(tempArray1.size());
+        for (Card foodCard : tempArray1) {
             System.out.print("Position of " + foodCard + ": ");
             int index = scan.nextInt();
             tempArray3.add(index, foodCard);
         }
         for (int i = 0; i < tempArray3.size(); i++) {
-            Utility.moveFoodCards(tempArray3, i, foodDeck, i);
+            Utility.moveCards(tempArray3, i, foodDeck, i);
         }
         cardOptions = new StringBuilder("[");
-        for (DimensionCard dimension : tempArray2) {
-            cardOptions.append(dimension.getDimensionName());
-            if (!dimension.getDimensionName().equals(tempArray2.get(tempArray2.size() - 1).getDimensionName())) {
+        for (Card dimension : tempArray2) {
+            cardOptions.append(dimension.getName());
+            if (!dimension.getName().equals(tempArray2.get(tempArray2.size() - 1).getName())) {
                 cardOptions.append(", ");
             }
             cardOptions = new StringBuilder("]");
         }
         System.out.println("These are the Dimension cards obtained: " + cardOptions);
         System.out.println("Choose what order to place them on the deck from the top(which is 0) to bottom(the # of cards there are minus 1)");
-        ArrayList<DimensionCard> tempArray4 = new ArrayList<>(tempArray2.size());
-        for (DimensionCard dimensionCard : tempArray2) {
+        ArrayList<Card> tempArray4 = new ArrayList<>(tempArray2.size());
+        for (Card dimensionCard : tempArray2) {
             System.out.print("Position of " + dimensionCard + ": ");
             int index = scan.nextInt();
             tempArray4.add(index, dimensionCard);
         }
         for (int i = 0; i < tempArray4.size(); i++) {
-            Utility.moveDimensionCards(tempArray4, i, dimensionDeck, i);
+            Utility.moveCards(tempArray4, i, dimensionDeck, i);
         }
     }
 
-    private void accessAbility4(Player currentPlayer, ArrayList<DimensionCard> dimensionDeck, ArrayList<DimensionCard> dimensionDiscard, ArrayList<FoodCard> foodDeck, ArrayList<FoodCard> foodDiscard, Player[] turnOrder) {
+    private void accessAbility4(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
         for (Player player : turnOrder) {
             if (!player.equals(currentPlayer)) {
-                if (Utility.dimensionOrFood()) {
-                    int dimension = (int) (Math.random() * (dimensionDeck.size() + 1));
-                    Utility.moveDimensionCards(player.getDimensionHand(), dimension, dimensionDiscard);
+                int cardIndex = (int) (Math.random() * (dimensionDeck.size() + 1));
+                if(player.getHand().get(cardIndex) instanceof DimensionCard) {
+                    Utility.moveCards(player.getHand(), cardIndex, dimensionDiscard);
                 } else {
-                    int food = (int) (Math.random() * (foodDeck.size() + 1));
-                    Utility.moveFoodCards(player.getFoodHand(), food, foodDiscard);
+                    Utility.moveCards(player.getHand(), cardIndex, foodDiscard);
                 }
             }
         }
-
         System.out.println("Choose to take from the Dimension or Food deck");
         String choice = scan.nextLine();
         choice = choice.toLowerCase();
 
-        if (choice.equals("dimension")) {
-            ArrayList<DimensionCard> tempArray1 = new ArrayList<>(10);
-
-            for (int i = 10; i > 0; i--) {
-                Utility.moveDimensionCards(dimensionDiscard, i, tempArray1, i);
-            }
-
-            StringBuilder cardOptions = new StringBuilder("[");
-
-            for (DimensionCard dimension : tempArray1) {
-                cardOptions.append(dimension.getDimensionName());
-                if (!dimension.getDimensionName().equals(tempArray1.get(tempArray1.size() - 1).getDimensionName())) {
-                    cardOptions.append(", ");
+        Card[] selectedCards = new Card[10];
+        int nullCount = 0;
+        for (int i = 0; i < 10; i++) {
+            if(selectedCards[i] != null) {
+                if(choice.equals("dimension")) {
+                    selectedCards[i] = dimensionDiscard.get(i);
+                } else {
+                    selectedCards[i] = foodDiscard.get(i);
                 }
-                cardOptions.append("]");
+            } else {
+                nullCount++;
             }
-
-            System.out.println("These are the Dimension cards obtained: " + cardOptions);
-            System.out.println("Choose what order to place them on the deck from top(which is 0) to bottom(the # of cards there are minus 1)");
-            ArrayList<DimensionCard> tempArray4 = new ArrayList<>(tempArray1.size());
-
-            for (DimensionCard dimensionCard : tempArray1) {
-                System.out.print("Position of " + dimensionCard + ": ");
+        }
+        System.out.print("These are the Dimension cards obtained: ");
+        Utility.printElementNames(selectedCards);
+        System.out.println("Choose what order to place them on the deck from top(which is 0) to bottom(the # of cards there are minus 1)");
+        ArrayList<Card> tempArray = new ArrayList<>(selectedCards.length - nullCount);
+        for (Card card : selectedCards) {
+            if (card != null) {
+                System.out.print("Position of " + card + ": ");
                 int index = scan.nextInt();
-                tempArray4.add(index, dimensionCard);
+                tempArray.add(index, card);
             }
-
-            for (int i = 0; i < tempArray4.size(); i++) {
-                Utility.moveDimensionCards(tempArray4, i, dimensionDeck, i);
-            }
-
-        } else {
-            ArrayList<FoodCard> tempArray2 = new ArrayList<>(10);
-
-            for (int i = 10; i > 0; i--) {
-                Utility.moveFoodCards(foodDiscard, i, tempArray2, i);
-            }
-
-            StringBuilder cardOptions = new StringBuilder("[");
-            for (FoodCard food : tempArray2) {
-                cardOptions.append(food.getFoodName());
-                if (!food.getFoodName().equals(tempArray2.get(tempArray2.size() - 1).getFoodName())) {
-                    cardOptions.append(", ");
-                }
-                cardOptions.append("]");
-            }
-
-            System.out.println("These are the Food cards obtained: " + cardOptions);
-            System.out.println("Choose what order to place them on the deck from top(which is 0) to bottom(the # of cards there are minus 1)");
-            ArrayList<FoodCard> tempArray3 = new ArrayList<>(tempArray2.size());
-
-            for (FoodCard foodCard : tempArray2) {
-                System.out.print("Position of " + foodCard + ": ");
-                int index = scan.nextInt();
-                tempArray3.add(index, foodCard);
-            }
-
-            for (int i = 0; i < tempArray3.size(); i++) {
-                Utility.moveFoodCards(tempArray3, i, foodDeck, i);
+        }
+        for (int i = 0; i < tempArray.size(); i++) {
+            if (choice.equals("dimension")) {
+                Utility.moveCards(tempArray, i, dimensionDeck, i);
+            } else {
+                Utility.moveCards(tempArray, i, foodDeck, i);
             }
         }
     }
