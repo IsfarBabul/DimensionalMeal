@@ -40,18 +40,16 @@ public class Utility {
         }
     }*/
     public static void printElementNames(ArrayList<Card> deck) {
-        System.out.print("[");
+        System.out.print("|");
         for (int i = 0; i < deck.size() - 1; i++) {
-            System.out.print(deck.get(i).getName() + ", ");
+            System.out.print(deck.get(i).getName() + "|");
         }
-        System.out.print(deck.get(deck.size() - 1) + "]");
     }
     public static void printElementNames(Card[] deck) {
-        System.out.print("[");
+        System.out.print("|");
         for (int i = 0; i < deck.length - 1; i++) {
-            System.out.print(deck[i].getName() + ", ");
+            System.out.print(deck[i].getName() + "|");
         }
-        System.out.print(deck[deck.length - 1] + "]");
     }
     public static void clearWindow() {
         try {

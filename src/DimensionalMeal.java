@@ -210,6 +210,35 @@ public class DimensionalMeal {
             case 9 -> upgradeFoodCard();           // 3/5
         }
     }
+    private void playFoodCard() {
 
+    }
+    private void buyFoodCard() {
+
+    }
+    private void checkFoodCardStats() {
+
+    }
+    private void buyDimensionCard() {
+
+    }
+    private void fuse() {
+
+    }
+    private void enhanceFuse() {
+
+    }
+    private void checkFoodDiscard() {
+
+    }
+    private void checkDimensionDiscard() {
+
+    }
+    private void checkMealDiscard() {
+
+    }
+    private void upgradeFoodCard() {
+
+    }
 }
 

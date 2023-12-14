@@ -43,7 +43,9 @@ public class MealCard extends Card{
        String[] foods = new String[]{"\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11", "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C", "\uD83E\uDD69", "\uD83C\uDF64", "\uD83C\uDF3E", "\uD83C\uDF5E", "\uD83E\uDDC0", "\uD83C\uDF76"};
        int prevMealRequirementIndex = mealRequirements.size() - 1;
        ArrayList<String> newMealRequirement = new ArrayList<>(0);
-       if(!mealRequirements.get(prevMealRequirementIndex).isEmpty()) {
+       if(mealRequirements.isEmpty()) {
+           newMealRequirement = new ArrayList<>();
+       } else {
            newMealRequirement = mealRequirements.get(prevMealRequirementIndex);
        }
        int randNum = (int) (Math.random() * 11);
