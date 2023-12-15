@@ -11,6 +11,7 @@ public class DairyFoodCard extends FoodCard{
             case 2 -> accessAbility2(turnOrder);
             case 3 -> accessAbility3(currentPlayer, turnOrder, foodDiscard);
             case 4 -> accessAbility4(currentPlayer, scan, turnOrder, dimensionDiscard);
+            default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
     public String accessDescription(int level) {
@@ -43,8 +44,8 @@ public class DairyFoodCard extends FoodCard{
         }
         return string;
     }
-    public int accessCost(int level) {
-        return level;
+    public int accessCost() {
+        return super.getLevel();
     }
 
     //------------PRIVATE METHODS-----------//
@@ -76,11 +77,11 @@ public class DairyFoodCard extends FoodCard{
 
     public void accessAbility3(Player currentPlayer, Player[] turnOrder, ArrayList<Card> foodDiscard) {
         boolean hasFoodCard = false;
-        ArrayList<Card> foodCards = new ArrayList<>(0);
+        ArrayList<String> foodCards = new ArrayList<>(0);
         for (Card card : currentPlayer.getHand()) {
             if (card instanceof FoodCard) {
                 hasFoodCard = true;
-                foodCards.add(card);
+                foodCards.add(card.getName());
             }
         }
         if (hasFoodCard) {

@@ -12,6 +12,7 @@ public class FruitFoodCard extends FoodCard{
             case 2 -> accessAbility2(currentPlayer);
             case 3 -> accessAbility3(currentPlayer);
             case 4 -> accessAbility4(currentPlayer, turnOrder);
+            default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
     public String accessDescription(int level) {
@@ -44,7 +45,7 @@ public class FruitFoodCard extends FoodCard{
         }
         return string;
     }
-    public int accessCost(int level) {
+    public int accessCost() {
         return 0;
     }
 

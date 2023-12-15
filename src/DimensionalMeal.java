@@ -46,9 +46,9 @@ public class DimensionalMeal {
     private void loadGUI(Player currentPlayer) {
         System.out.println("\uD83C\uDFB4(65) - Dimension Deck              \uD83D\uDDC2️(3) - Dimension Discard");
         System.out.println();
-        System.out.println("\uD83E\uDDFA(69) - Food Deck(it's a basket)    \uD83D\uDDD1\uFE0F(7) - Food Discard");
+        System.out.println("\uD83E\uDDFA(69) - Food Deck(it's a basket)    \uD83D\uDDD1️(7) - Food Discard");
         System.out.println();
-        System.out.println("\uD83C\uDF7D\uFE0F(14) - Meal Deck                   ♻️(12) - Meal Discard");
+        System.out.println("\uD83C\uDF7D️(14) - Meal Deck                   ♻️(12) - Meal Discard");
         System.out.println("_____________");
         System.out.println("|Meal Card: |");
         System.out.println("|           |");
@@ -96,8 +96,8 @@ public class DimensionalMeal {
                 orderIndex = 0;
             }
             currentPlayer = turnOrder[orderIndex];
+            pauseSwap(currentPlayer, turnOrder);
         }
-        pauseSwap(currentPlayer, turnOrder);
     }
     private void pauseSwap(Player currentPlayer, Player[] turnOrder) {
         Utility.clearWindow();
@@ -111,6 +111,7 @@ public class DimensionalMeal {
             prevPlayer = turnOrder[turnOrder.length - 1];
         }
         System.out.println("Allow time for " + prevPlayer.getPlayerName() + " to swap places with " + currentPlayer + " to prevent players from looking at each others' data.");
+        scan.nextLine();
         Utility.clearWindow();
     }
     private void shuffleMealDeck() {
@@ -211,10 +212,40 @@ public class DimensionalMeal {
         }
     }
     private void playFoodCard() {
-
+        ArrayList<String> foodCards = new ArrayList<>();
+        ArrayList<Integer> foodIndex = new ArrayList<>();
+        for (int i = 0; i < currentPlayer.getHand().size(); i++) {
+            if (currentPlayer.getHand().get(i) instanceof FoodCard) {
+                foodCards.add(currentPlayer.getHand().get(i).getName());
+                foodIndex.add(i);
+            }
+        }
+        System.out.print("What food card would you like to play from the given options(starting from index 0: ");
+        Utility.printElementNames(foodCards);
+        System.out.println();
+        int choice = scan.nextInt();
+        FoodCard foodCard = (FoodCard) currentPlayer.getHand().get(foodIndex.get(choice));
+        if (currentPlayer.getActionsLeft() >= foodCard.accessCost()) {
+            foodCard.accessAbility(foodCard.getLevel(), currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder);
+            currentPlayer.decreaseActions(foodCard.accessCost());
+            Utility.moveCards(currentPlayer.getHand(), foodIndex.get(choice), foodDiscard);
+        } else {
+            System.out.println("Purchase Unsuccessful");
+        }
+        scan.nextLine();
+        Utility.clearWindow();
     }
     private void buyFoodCard() {
-
+        if (currentPlayer.getActionsLeft() >= 2) {
+            int level = dimensionDeck.get(0).getLevel();
+            Utility.moveCards(dimensionDeck, 0, dimensionDiscard);
+            foodDeck.get(0).setLevel(level);
+            Utility.moveCards(foodDeck, 0, currentPlayer.getHand());
+        } else {
+            System.out.println("Purchase Unsuccessful");
+        }
+        scan.nextLine();
+        Utility.clearWindow();
     }
     private void checkFoodCardStats() {
 

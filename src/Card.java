@@ -15,6 +15,9 @@ public abstract class Card {
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
     public void incrementLevel() {
         level++;
     }
@@ -24,4 +27,5 @@ public abstract class Card {
     public abstract String accessInstruction(int level);
 
     public abstract String accessExample(int level);
+
 }

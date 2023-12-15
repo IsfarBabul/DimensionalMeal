@@ -8,23 +8,30 @@ public class WildFoodCard extends FoodCard{
     }
     @Override
     public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
-        ArrayList<String> foodItems =  currentPlayer.getMealCard().getFoodItem();
-        int itemsObtained = 0;
-        boolean itemFound = false;
-        do {
-            System.out.println("Choose from the available options by typing a number starting from index 0: " + foodItems);
-            int index = scan.nextInt();
-            int count = 0;
-            for (Card food : foodDeck) {
-                if (food.getName().equals(foodItems.get(index)) && !itemFound) {
-                    Utility.moveCards(foodDeck, count, currentPlayer.getHand());
-                    count++;
-                    itemFound = true;
+        System.out.println("Would you like to access the Zero or Wild ability? ");
+        String choice = scan.nextLine();
+        choice = choice.toLowerCase();
+        if (choice.equals("zero")) {
+            access0(currentPlayer, foodDeck, foodDiscard);
+        } else {
+            ArrayList<String> foodItems = currentPlayer.getMealCard().getFoodItem();
+            int itemsObtained = 0;
+            boolean itemFound = false;
+            do {
+                System.out.println("Choose from the available options by typing a number starting from index 0: " + foodItems);
+                int index = scan.nextInt();
+                int count = 0;
+                for (Card food : foodDeck) {
+                    if (food.getName().equals(foodItems.get(index)) && !itemFound) {
+                        Utility.moveCards(foodDeck, count, currentPlayer.getHand());
+                        count++;
+                        itemFound = true;
+                    }
                 }
-            }
-            System.out.println("Your chosen option wasn't found...");
-        } while (itemsObtained < currentPlayer.getDimensionLevel());
-        System.out.println("You have reached your limit of items obtainable.");
+                System.out.println("Your chosen option wasn't found...");
+            } while (itemsObtained < currentPlayer.getDimensionLevel());
+            System.out.println("You have reached your limit of items obtainable.");
+        }
     }
     public String accessDescription(int level) {
         return "The greatest delicacy in existence...except perhaps pizza.";
@@ -35,7 +42,7 @@ public class WildFoodCard extends FoodCard{
     public String accessExample(int level) {
         return "Check your dimension level as well as the specific food items on your meal card.\nSearch the deck for a number of those specific food items equal to your level.\nChoose as many food items as there are in the deck and you forfeit the rest.";
     }
-    public int accessCost(int level) {
-        return level;
+    public int accessCost() {
+        return super.getLevel();
     }
 }

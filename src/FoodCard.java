@@ -14,7 +14,7 @@ public abstract class FoodCard extends Card {
     /**
      * ------------------------Zero-----------------------
      **/
-    private void access0(Player currentPlayer, ArrayList<Card> foodDeck, ArrayList<FoodCard> foodDiscard) {
+    public void access0(Player currentPlayer, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard) {
         int count = 0;
         boolean alreadyReceived = false;
         for (Card food : foodDeck) {
@@ -34,6 +34,6 @@ public abstract class FoodCard extends Card {
 
     public abstract String accessExample(int level);
 
-    public abstract int accessCost(int level);
+    public abstract int accessCost();
 
 }

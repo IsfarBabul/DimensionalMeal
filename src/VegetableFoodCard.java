@@ -12,6 +12,7 @@ public class VegetableFoodCard extends FoodCard{
             case 2 -> accessAbility2(currentPlayer, dimensionDeck);
             case 3 -> accessAbility3(currentPlayer, dimensionDeck);
             case 4 -> accessAbility4(currentPlayer, dimensionDeck, turnOrder);
+            default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
     public String accessDescription(int level) {
@@ -44,8 +45,8 @@ public class VegetableFoodCard extends FoodCard{
         }
         return string;
     }
-    public int accessCost(int level) {
-        return level - 1;
+    public int accessCost() {
+        return super.getLevel() - 1;
     }
 
     //------------PRIVATE METHODS-----------//

@@ -11,6 +11,7 @@ public class ProteinFoodCard extends FoodCard{
             case 2 -> accessAbility2(currentPlayer, turnOrder);
             case 3 -> accessAbility3(currentPlayer, turnOrder);
             case 4 -> accessAbility4(currentPlayer, turnOrder);
+            default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
     public String accessDescription(int level) {
@@ -43,8 +44,8 @@ public class ProteinFoodCard extends FoodCard{
         }
         return string;
     }
-    public int accessCost(int level) {
-        return level;
+    public int accessCost() {
+        return super.getLevel();
     }
 
     //------------PRIVATE METHODS-----------//

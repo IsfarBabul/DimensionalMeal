@@ -39,10 +39,10 @@ public class Utility {
             Utility.moveCards(targetPlayer.getHand(), cardIndex, foodDiscard);
         }
     }*/
-    public static void printElementNames(ArrayList<Card> deck) {
+    public static void printElementNames(ArrayList<String> deck) {
         System.out.print("|");
         for (int i = 0; i < deck.size() - 1; i++) {
-            System.out.print(deck.get(i).getName() + "|");
+            System.out.print(deck.get(i) + "|");
         }
     }
     public static void printElementNames(Card[] deck) {
@@ -50,6 +50,9 @@ public class Utility {
         for (int i = 0; i < deck.length - 1; i++) {
             System.out.print(deck[i].getName() + "|");
         }
+    }
+    public static void enforceQuestionAnswer() {
+
     }
     public static void clearWindow() {
         try {
