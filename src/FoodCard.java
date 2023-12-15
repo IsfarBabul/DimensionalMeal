@@ -26,13 +26,13 @@ public abstract class FoodCard extends Card {
         }
     }
 
-    public abstract void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder);
+    public abstract void accessAbility(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder);
 
-    public abstract String accessDescription(int level);
+    public abstract String accessDescription();
 
-    public abstract String accessInstruction(int level);
+    public abstract String accessInstruction();
 
-    public abstract String accessExample(int level);
+    public abstract String accessExample();
 
     public abstract int accessCost();
 

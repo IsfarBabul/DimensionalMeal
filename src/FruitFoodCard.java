@@ -6,8 +6,8 @@ public class FruitFoodCard extends FoodCard{
         super(name, level, scan);
     }
     @Override
-    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
-        switch (level) {
+    public void accessAbility(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
+        switch (super.getLevel()) {
             case 1 -> accessAbility1(currentPlayer);
             case 2 -> accessAbility2(currentPlayer);
             case 3 -> accessAbility3(currentPlayer);
@@ -15,9 +15,9 @@ public class FruitFoodCard extends FoodCard{
             default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
-    public String accessDescription(int level) {
+    public String accessDescription() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Your mood seems to lighten. I wonder why?";
             case 2 -> string = "You seem to heal faster.";
             case 3 -> string = "You feel like you can do anything!";
@@ -25,9 +25,9 @@ public class FruitFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessInstruction(int level) {
+    public String accessInstruction() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Gain 1 action";
             case 2 -> string = "Gain 2 actions";
             case 3 -> string = "Gain 3 actions";
@@ -35,9 +35,9 @@ public class FruitFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessExample(int level) {
+    public String accessExample() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Your action count is increased by 1.";
             case 2 -> string = "Your action count is increased by 2.";
             case 3 -> string = "Your action count is increased by 3.";

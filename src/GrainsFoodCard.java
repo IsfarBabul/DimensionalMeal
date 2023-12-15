@@ -2,11 +2,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GrainsFoodCard extends FoodCard{
-    public GrainsFoodCard(String name,  int level, Scanner scan) {
+    public GrainsFoodCard(String name, int level, Scanner scan) {
         super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
-        switch (level) {
+    public void accessAbility(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
+        switch (super.getLevel()) {
             case 1 -> accessAbility1(currentPlayer, dimensionDiscard, foodDiscard, turnOrder);
             case 2 -> accessAbility2(currentPlayer, dimensionDiscard, foodDiscard, turnOrder);
             case 3 -> accessAbility3(currentPlayer, dimensionDeck, foodDeck, turnOrder);
@@ -14,9 +14,9 @@ public class GrainsFoodCard extends FoodCard{
             default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
-    public String accessDescription(int level) {
+    public String accessDescription() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "You can intimidate someone.";
             case 2 -> string = "You establish dominance over the crowd.";
             case 3 -> string = "Your power influences the deck itself.";
@@ -24,9 +24,9 @@ public class GrainsFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessInstruction(int level) {
+    public String accessInstruction() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "1. Choose an opponent\n2. They must discard a random card";
             case 2 -> string = "1. All other players give up a random card\n2. Of those discarded this way, you may gain one of those cards";
             case 3 -> string = "1. All other players give up a random card\n2. Separate them into Food and Dimension cards\n3. Put the cards in their respective decks in any order you choose";
@@ -34,9 +34,9 @@ public class GrainsFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessExample(int level) {
+    public String accessExample() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Pick one player besides yourself.\nThey must pick a random card and put it in the appropriate discard pile.";
             case 2 -> string = "All players besides yourself pick a random card\nThey must discard that card.\nFrom the cards discarded this way, you may choose one to add to your hand.";
             case 3 -> string = "All players besides yourself pick a random card\nThey must discard that card.\nFrom the cards discarded this way, split them into Food and Dimension cards.\nPlace them on the appropriate decks in any order you wish.";

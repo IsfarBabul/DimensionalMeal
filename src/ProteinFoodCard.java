@@ -5,8 +5,8 @@ public class ProteinFoodCard extends FoodCard{
     public ProteinFoodCard(String name, int level, Scanner scan) {
         super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
-        switch (level) {
+    public void accessAbility(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
+        switch (super.getLevel()) {
             case 1 -> accessAbility1(currentPlayer, turnOrder);
             case 2 -> accessAbility2(currentPlayer, turnOrder);
             case 3 -> accessAbility3(currentPlayer, turnOrder);
@@ -14,9 +14,9 @@ public class ProteinFoodCard extends FoodCard{
             default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
-    public String accessDescription(int level) {
+    public String accessDescription() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "You seem to go faster.";
             case 2 -> string = "Your picking up the pace.";
             case 3 -> string = "You know how to run!";
@@ -24,9 +24,9 @@ public class ProteinFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessInstruction(int level) {
+    public String accessInstruction() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "1. Choose an opponent\n2. They start their next turn with 1 fewer action";
             case 2 -> string = "1. On your next turn, start with 2 more actions\n2.Choose an opponent\n3. They start their next turn with 1 fewer action";
             case 3 -> string = "1. On your next turn, start with 3 more actions\n2. Choose an opponent\n3. They start their next turn with 1 fewer action";
@@ -34,9 +34,9 @@ public class ProteinFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessExample(int level) {
+    public String accessExample() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Pick one player besides yourself.\nTheir action count is decreased by 1.";
             case 2 -> string = "Your action count is increased by 2 on your next turn.\nAlso, Pick one player besides yourself\nTheir action count is decreased by 1.";
             case 3 -> string = "Your action count is increased by 3 on your next turn.\nAlso, Pick one player besides yourself\nTheir action count is decreased by 1.";

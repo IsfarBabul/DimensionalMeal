@@ -5,8 +5,8 @@ public class DairyFoodCard extends FoodCard{
     public DairyFoodCard(String name, int level, Scanner scan) {
         super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
-        switch (level) {
+    public void accessAbility(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
+        switch (super.getLevel()) {
             case 1 -> accessAbility1(currentPlayer, turnOrder);
             case 2 -> accessAbility2(turnOrder);
             case 3 -> accessAbility3(currentPlayer, turnOrder, foodDiscard);
@@ -14,9 +14,9 @@ public class DairyFoodCard extends FoodCard{
             default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
-    public String accessDescription(int level) {
+    public String accessDescription() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "You seem to be a little prankster.";
             case 2 -> string = "Your pranks affect everyone.";
             case 3 -> string = "You trample over the farms of your foes.";
@@ -24,9 +24,9 @@ public class DairyFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessInstruction(int level) {
+    public String accessInstruction() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "1. Choose two opponents(or you and your opponent for 1v1s)\n2. A random card from each player will be given to the other player";
             case 2 -> string = "1. One random card is chosen per player(including you) \n2. This card is given to the next person in turn order";
             case 3 -> string = "1. Look at your Dimension level\n2. Choose one Food card you have(required to activate ability otherwise it does nothing and you wasted a card)\n3. Choose an opponent\n4. They must discard a number Food cards of that type up to your one more than your level";
@@ -34,9 +34,9 @@ public class DairyFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessExample(int level) {
+    public String accessExample() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Pick two players besides yourself.\nEach player picks a random card and must give it to the other player.\nIn 2-player matches, you swap with your opponent.";
             case 2 -> string = "EVERY player chooses a random card.\nEach card is given to the next player that would get their turn after the player giving the card would end their turn.";
             case 3 -> string = "Check your Dimension level and if you have have a Food card.\nIf so then choose a player besides yourself.\nThey must move all Food cards of the same name in their hand to the Food discard pile.";
@@ -77,11 +77,11 @@ public class DairyFoodCard extends FoodCard{
 
     public void accessAbility3(Player currentPlayer, Player[] turnOrder, ArrayList<Card> foodDiscard) {
         boolean hasFoodCard = false;
-        ArrayList<String> foodCards = new ArrayList<>(0);
+        ArrayList<Card> foodCards = new ArrayList<>(0);
         for (Card card : currentPlayer.getHand()) {
             if (card instanceof FoodCard) {
                 hasFoodCard = true;
-                foodCards.add(card.getName());
+                foodCards.add(card);
             }
         }
         if (hasFoodCard) {

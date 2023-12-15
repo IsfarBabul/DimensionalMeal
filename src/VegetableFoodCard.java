@@ -6,8 +6,8 @@ public class VegetableFoodCard extends FoodCard{
     public VegetableFoodCard(String name, int level, Scanner scan) {
         super(name, level, scan);
     }
-    public void accessAbility(int level, Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
-        switch (level) {
+    public void accessAbility(Player currentPlayer, ArrayList<Card> dimensionDeck, ArrayList<Card> dimensionDiscard, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard, Player[] turnOrder) {
+        switch (super.getLevel()) {
             case 1 -> accessAbility1(currentPlayer, dimensionDeck);
             case 2 -> accessAbility2(currentPlayer, dimensionDeck);
             case 3 -> accessAbility3(currentPlayer, dimensionDeck);
@@ -15,9 +15,9 @@ public class VegetableFoodCard extends FoodCard{
             default -> access0(currentPlayer, foodDeck, foodDiscard);
         }
     }
-    public String accessDescription(int level) {
+    public String accessDescription() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "You see weird flashes.";
             case 2 -> string = "Your seeing things.";
             case 3 -> string = "You spot random objects.";
@@ -25,9 +25,9 @@ public class VegetableFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessInstruction(int level) {
+    public String accessInstruction() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Gain 1 Dimension card";
             case 2 -> string = "Gain 2 Dimension cards";
             case 3 -> string = "Gain 4 Dimension cards";
@@ -35,9 +35,9 @@ public class VegetableFoodCard extends FoodCard{
         }
         return string;
     }
-    public String accessExample(int level) {
+    public String accessExample() {
         String string = "";
-        switch (level) {
+        switch (super.getLevel()) {
             case 1 -> string = "Draw 1 Dimension card from the Dimension deck.";
             case 2 -> string = "Draw 2 Dimension card from the Dimension deck.";
             case 3 -> string = "Draw 4 Dimension card from the Dimension deck.";

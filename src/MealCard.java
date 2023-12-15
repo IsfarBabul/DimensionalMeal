@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
-public class MealCard extends Card{
+public class MealCard extends Card {
    private String name;
    private int level;
-   public ArrayList<String> foodItem;
+   private ArrayList<String> foodItem;
    private final ArrayList<Integer> multipliers;
    private ArrayList<ArrayList<String>> mealRequirements = new ArrayList<>(0);
    public MealCard(String name, int level) {
@@ -66,15 +66,15 @@ public class MealCard extends Card{
         this.name = name;
     }
 
-    public String accessDescription(int level) {
+    public String accessDescription() {
         return null;
     }
 
-    public String accessInstruction(int level) {
+    public String accessInstruction() {
         return null;
     }
 
-    public String accessExample(int level) {
+    public String accessExample() {
         return null;
     }
 }

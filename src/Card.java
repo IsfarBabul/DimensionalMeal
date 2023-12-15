@@ -18,14 +18,11 @@ public abstract class Card {
     public void setLevel(int level) {
         this.level = level;
     }
-    public void incrementLevel() {
-        level++;
-    }
 
-    public abstract String accessDescription(int level);
+    public abstract String accessDescription();
 
-    public abstract String accessInstruction(int level);
+    public abstract String accessInstruction();
 
-    public abstract String accessExample(int level);
+    public abstract String accessExample();
 
 }
