@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class MealCard extends Card {
    private String name;
    private int level;
-   private ArrayList<String> foodItem;
+   private final ArrayList<String> foodItem;
    private final ArrayList<Integer> multipliers;
    private ArrayList<ArrayList<String>> mealRequirements = new ArrayList<>(0);
    public MealCard(String name, int level) {
@@ -21,7 +21,7 @@ public class MealCard extends Card {
         return multipliers;
     }
 
-    public void obtainCurrentRequirements(int level) {
+    public void obtainCurrentRequirements() {
        String[] foods = new String[]{"\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11", "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C", "\uD83E\uDD69", "\uD83C\uDF64", "\uD83C\uDF3E", "\uD83C\uDF5E", "\uD83E\uDDC0", "\uD83C\uDF76"};
        ArrayList<String> currentMealRequirements = mealRequirements.get(level + 2);
        for (String food : foods) {
@@ -43,10 +43,15 @@ public class MealCard extends Card {
        String[] foods = new String[]{"\uD83E\uDED0", "\uD83C\uDF5A", "\uD83C\uDF11", "\uD83E\uDD66", "\uD83C\uDF46", "\uD83E\uDD6C", "\uD83E\uDD69", "\uD83C\uDF64", "\uD83C\uDF3E", "\uD83C\uDF5E", "\uD83E\uDDC0", "\uD83C\uDF76"};
        int prevMealRequirementIndex = mealRequirements.size() - 1;
        ArrayList<String> newMealRequirement;
-       if (mealRequirements.isEmpty()) {
-           newMealRequirement = new ArrayList<>();
-       } else {
-           newMealRequirement = mealRequirements.get(prevMealRequirementIndex);
+       newMealRequirement = new ArrayList<>();
+       if (!mealRequirements.isEmpty()) {
+           for (int i = 0; i < mealRequirements.get(prevMealRequirementIndex).size(); i++) {
+               for (String food : foods) {
+                   if (mealRequirements.get(prevMealRequirementIndex).get(i).equals(food)) {
+                       newMealRequirement.add(i, food);
+                   }
+               }
+           }
        }
        int randNum = (int) (Math.random() * 11);
        String food = foods[randNum];
@@ -59,11 +64,15 @@ public class MealCard extends Card {
    }
     public void setLevel(int level) {
         this.level = level;
-        obtainCurrentRequirements(level);
+        obtainCurrentRequirements();
     }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name + "'s Meal Card:";
     }
 
     public String accessDescription() {

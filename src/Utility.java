@@ -41,8 +41,8 @@ public class Utility {
     }*/
     public static void printElementNames(ArrayList<Card> deck) {
         System.out.print("|");
-        for (int i = 0; i < deck.size() - 1; i++) {
-            System.out.print(deck.get(i).getName() + "|");
+        for (Card card : deck) {
+            System.out.print(card.getName() + card.getLevel() + "|");
         }
     }
     public static void printElementNames(Card[] deck) {

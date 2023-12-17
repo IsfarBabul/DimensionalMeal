@@ -39,48 +39,52 @@ public class DimensionalMeal {
         createMealDeck();
         for (int i = 0; i < turnOrder.length; i++) {
             turnOrder[i].setMealCard((MealCard) mealDeck.get(0));
-            turnOrder[i].getMealCard().setName(turnOrder[i].getPlayerName() + "'s Meal Card");
+            turnOrder[i].getMealCard().setName(turnOrder[i].getPlayerName());
             Utility.moveCards(mealDeck, 0, mealCardSuspension, i);
         }
         currentPlayer = turnOrder[0];
     }
-    private void loadGUI(Player currentPlayer) {
+    private void loadGUI() {
         MealCard mealCard = currentPlayer.getMealCard();
         System.out.println("\uD83C\uDFB4(" + dimensionDeck.size() + ") - Dimension Deck              \uD83D\uDDC2️(" + dimensionDiscard.size() + ") - Dimension Discard");
         System.out.println();
         System.out.println("\uD83E\uDDFA(" + foodDeck.size() + ") - Food Deck(it's a basket)    \uD83D\uDDD1️(" + foodDiscard.size() + ") - Food Discard");
         System.out.println();
         System.out.println("\uD83C\uDF7D️(" + mealDeck.size() + ") - Meal Deck                   ♻️(" + mealDiscard.size() + ") - Meal Discard");
-        System.out.println("_____________");
-        System.out.println("|Meal Card: |");
-        System.out.println("|           |");
-        for (int j = 0; j < mealCard.getFoodItem().size(); j++) {
-            System.out.println("|" + mealCard.getFoodItem().get(j) + " x" + mealCard.getMultipliers().get(j) + "       |");
-        }
-        System.out.println("|           |");
-        if (mealCard.getLevel() == 4) {
-            System.out.println("| \uD83C\uDFC6WIN!!!  |");
-        } else {
-            System.out.println("|           |");
-        }
-        System.out.println("L___________J");
         System.out.println();
+        System.out.println(mealCard.getName());
+        System.out.println("____________");
+        System.out.println("|          |");
+        for (int j = 0; j < mealCard.getFoodItem().size(); j++) {
+            System.out.println("|" + mealCard.getFoodItem().get(j) + " x" + mealCard.getMultipliers().get(j) + "     |");
+        }
+        System.out.println("|          |");
+        if (mealCard.getLevel() == 4) {
+            System.out.println("|[0] \uD83C\uDFC6WIN! |");
+        } else {
+            System.out.println("|[0] " + currentPlayer.getDimensionLevel() + "-->" + (currentPlayer.getDimensionLevel() + 1) + " |");
+        }
+        System.out.println("L__________J");
+        System.out.println();
+        System.out.println("Number of completed turns: " + completeTurns);
         System.out.println();
         System.out.println("Current Dimension Level: " + currentPlayer.getDimensionLevel());
         System.out.println("Actions Left: " + currentPlayer.getActionsLeft());
-        System.out.println("[Player name]'s Hand:");
+        System.out.println(currentPlayer.getPlayerName() + "'s Hand:");
         Utility.printElementNames(currentPlayer.getHand());
         System.out.println();
-        System.out.println("[0] Play a Food Card in your hand (Cost: Whatever the card costs of food)");
-        System.out.println("[1] Buy a Food Card (Cost: 2 actions)");
-        System.out.println("[2] Check the Stats of a Food Card you have");
-        System.out.println("[3] Buy a Dimension Card(Cost: 1 action)");
-        System.out.println("[4] Fuse two Dimension Cards of the same type (Cost: Level of dimension you want to get to)");
-        System.out.println("[5] Enhanced Fusion (Cost: Double the Level of dimension you want to get to)");
-        System.out.println("[6] Check Food Discard");
-        System.out.println("[7] Check Dimension Discard");
-        System.out.println("[8] Check Meal Discard");
-        System.out.println("[9] Upgrade a Food Card(Cost: 1 action)");
+        System.out.println("[1] Buy a Dimension Card(Cost: 1 action)");
+        System.out.println("[2] Buy a Food Card (Cost: 2 actions)");
+        System.out.println("[3] Upgrade a Food Card(Cost: 1 action)");
+        System.out.println("[4] Play a Food Card in your hand (Cost: Whatever the card costs of food)");
+        System.out.println("[5] Fuse two Dimension Cards of the same type (Cost: Level of dimension you want to get to)");
+        System.out.println("[6] Enhanced Fusion (Cost: Double the Level of dimension you want to get to)");
+        System.out.println("[7] Check the Stats of a card you have");
+        System.out.println("[8] Check Dimension Discard");
+        System.out.println("[9] Check Food Discard");
+        System.out.println("[10] Check Meal Discard");
+        System.out.println("[11] Check other players' stats");
+        System.out.println("[12] Instructions to how each other option works");
         System.out.println();
         System.out.println("Enter an Option:");
     }
@@ -93,11 +97,11 @@ public class DimensionalMeal {
                 System.out.println("You still have less than 0 actions. You lose your turn.");
             }
             while (currentPlayer.getActionsLeft() > 0) {
-                loadGUI(turnOrder[0]);
+                loadGUI();
                 int option = scan.nextInt();
                 optionOutcome(option);
             }
-            loadGUI(turnOrder[0]);
+            loadGUI();
             System.out.println("Confirm end of turn");
             scan.nextLine();
             scan.nextLine();
@@ -147,7 +151,7 @@ public class DimensionalMeal {
         }
         dimensionDeck = newDeck;
     }
-    private void shuffleFoodDeck() {
+    private void shuffleFoodDeck()  {
         int lengthOfArray = foodDeck.size();
         ArrayList<Card> newDeck = new ArrayList<>(lengthOfArray);
         while(!foodDeck.isEmpty()) {
@@ -205,22 +209,39 @@ public class DimensionalMeal {
     private void createMealDeck() {
         for (int i = 0; i < 20; i++) {
             MealCard mealCard = new MealCard(null, 0);
+            mealCard.obtainCurrentRequirements();
             mealDeck.add(mealCard);
         }
     }
     private void optionOutcome(int outcome) {
         switch (outcome) {
-            case 0 -> playFoodCard();  // 3/5
-            case 1 -> buyFoodCard();       // 1/5
-            case 2 -> checkHandCardStats();   // 2/5
-            case 3 -> buyDimensionCard();   // 1/5
-            case 4 -> fuse();               // 3/5
-            case 5 -> enhanceFuse();         // 3/5
-            case 6 -> checkFoodDiscard();            // 2/5
-            case 7 -> checkDimensionDiscard();        // 2/5
-            case 8 -> checkMealDiscard();             // 4/5
-            case 9 -> upgradeFoodCard();           // 3/5
+            case 0 -> upgradeLevel();
+            case 1 -> buyDimensionCard();
+            case 2 -> buyFoodCard();
+            case 3 -> upgradeFoodCard();
+            case 4 -> playFoodCard();
+            case 5 -> fuse();
+            case 6 -> enhanceFuse();
+            case 7 -> checkHandCardStats();
+            case 8 -> checkDimensionDiscard();
+            case 9 -> checkFoodDiscard();
+            case 10 -> checkMealDiscard();
+            case 11 -> checkOpponentStats();
+            case 12 -> optionInstructions();
+            case 69 -> System.out.println("Nice! Never Gonna Give You Up!");
+            case 420 -> System.out.println("You needed option 12 to get here didn't you...or your that unoriginal...");
+            default -> System.out.println("Option Invalid! Choose a different option!");
         }
+        scan.nextLine();
+    }
+    private void upgradeLevel() {
+
+    }
+    private void checkOpponentStats() {
+
+    }
+    private void optionInstructions() {
+
     }
     private void playFoodCard() {
         ArrayList<Card> foodCards = new ArrayList<>();
@@ -237,9 +258,9 @@ public class DimensionalMeal {
         int choice = scan.nextInt();
         FoodCard foodCard = (FoodCard) currentPlayer.getHand().get(foodIndex.get(choice));
         if (currentPlayer.getActionsLeft() >= foodCard.accessCost()) {
+            Utility.moveCards(currentPlayer.getHand(), foodIndex.get(choice), foodDiscard);
             foodCard.accessAbility(currentPlayer, dimensionDeck, dimensionDiscard, foodDeck, foodDiscard, turnOrder);
             currentPlayer.decreaseActions(foodCard.accessCost());
-            Utility.moveCards(currentPlayer.getHand(), foodIndex.get(choice), foodDiscard);
         } else {
             System.out.println("Purchase Unsuccessful");
         }
@@ -318,15 +339,16 @@ public class DimensionalMeal {
         System.out.print("Pick Dimension Card 2: ");
         int index2 = scan.nextInt();
         fusePotential[1] = dimensionCards.get(index2);
-
+        int lowerIndex = Math.min(index1, index2);
+        int higherIndex = Math.max(index1, index2);
         int levelOfCurrentFuse = -1;
         if (fusePotential[0].getLevel() == fusePotential[1].getLevel()) {
             levelOfCurrentFuse = fusePotential[0].getLevel();
         }
         if (levelOfCurrentFuse < 4 && currentPlayer.getActionsLeft() >= levelOfCurrentFuse + 1 && levelOfCurrentFuse != -1) {
             String[] dimensions = new String[]{"┃", "⬛", "⛊", "☀"};
-            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(index1), dimensionDiscard);
-            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(index2), dimensionDiscard);
+            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(higherIndex), dimensionDiscard);
+            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(lowerIndex), dimensionDiscard);
             currentPlayer.decreaseActions(levelOfCurrentFuse + 1);
             DimensionCard dimensionCard = new DimensionCard(dimensions[levelOfCurrentFuse], levelOfCurrentFuse + 1);
             currentPlayer.getHand().add(dimensionCard);
@@ -345,25 +367,23 @@ public class DimensionalMeal {
                 dimensionIndex.add(i);
             }
         }
-        Card[] fusePotential = new DimensionCard[4];
+        int[] fusePotential = new int[4];
         Utility.printElementNames(dimensionCards);
-        System.out.print("Pick Dimension Card 1: ");
-        int index1 = scan.nextInt();
-        fusePotential[0] = dimensionCards.get(index1);
-        System.out.print("Pick Dimension Card 2: ");
-        int index2 = scan.nextInt();
-        fusePotential[1] = dimensionCards.get(index2);
-        System.out.print("Pick Dimension Card 3: ");
-        int index3 = scan.nextInt();
-        fusePotential[0] = dimensionCards.get(index1);
-        System.out.print("Pick Dimension Card 4: ");
-        int index4 = scan.nextInt();
-        fusePotential[1] = dimensionCards.get(index2);
+        for (int i = 0; i < fusePotential.length; i++) {
+            System.out.println("Pick Dimension Card " + (i + 1) + ": ");
+            fusePotential[i] = scan.nextInt();
+        }
+        for (int i = 0; i < 3; i++) {
+            int higherIndex = Math.max(fusePotential[i], fusePotential[i + 1]);
+            int lowerIndex = Math.min(fusePotential[i], fusePotential[i + 1]);
+            fusePotential[i] = higherIndex;
+            fusePotential[i + 1] = lowerIndex;
+        }
         int levelOfCurrentFuse = -1;
-        int fuseAttemptLevel = fusePotential[0].getLevel();
+        int fuseAttemptLevel = dimensionCards.get(fusePotential[0]).getLevel();
         int count = 0;
-        for (Card card : fusePotential) {
-            if (card.getLevel() == fuseAttemptLevel) {
+        for (int i = 0; i < fusePotential.length; i++) {
+            if (dimensionCards.get(fusePotential[i]).getLevel() == fuseAttemptLevel) {
                 count++;
             }
         }
@@ -372,11 +392,10 @@ public class DimensionalMeal {
         }
         if (levelOfCurrentFuse < 3 && currentPlayer.getActionsLeft() >= (levelOfCurrentFuse + 1) * 2 && levelOfCurrentFuse != -1) {
             String[] dimensions = new String[]{"┃", "⬛", "⛊", "☀"};
-            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(index1), dimensionDiscard);
-            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(index2), dimensionDiscard);
-            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(index3), dimensionDiscard);
-            Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(index4), dimensionDiscard);
-            currentPlayer.decreaseActions((levelOfCurrentFuse + 1) * 2 );
+            for (int i = 0; i < fusePotential.length; i++) {
+                Utility.moveCards(currentPlayer.getHand(), dimensionIndex.get(i), dimensionDiscard);
+            }
+            currentPlayer.decreaseActions((levelOfCurrentFuse + 1) * 2);
             DimensionCard dimensionCard1 = new DimensionCard(dimensions[levelOfCurrentFuse], levelOfCurrentFuse + 2);
             DimensionCard dimensionCard2 = new DimensionCard(dimensions[levelOfCurrentFuse], levelOfCurrentFuse + 2);
             currentPlayer.getHand().add(dimensionCard1);
