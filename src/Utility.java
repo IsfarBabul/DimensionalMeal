@@ -54,6 +54,12 @@ public class Utility {
     public static void enforceQuestionAnswer() {
 
     }
+    public static void funText(String text, int textNum) {
+        System.out.println((char)27 + "[" + textNum + "m" + text + ((char)27 + "[0m"));
+    }
+    public static String returnFunText(String text, int textNum) {
+        return (char)27 + "[" + textNum + "m" + text + ((char)27 + "[0m");
+    }
     public static void clearWindow() {
         try {
             String operatingSystem = System.getProperty("os.name");

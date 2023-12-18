@@ -15,14 +15,16 @@ public abstract class FoodCard extends Card {
      * ------------------------Zero-----------------------
      **/
     public void access0(Player currentPlayer, ArrayList<Card> foodDeck, ArrayList<Card> foodDiscard) {
-        int count = 0;
         boolean alreadyReceived = false;
-        for (Card food : foodDeck) {
-            if (food.getName().equals(foodDiscard.get(0).getName()) && !alreadyReceived) {
-                Utility.moveCards(foodDeck, count, currentPlayer.getHand());
+        int targetCardIndex = -1;
+        for (int i = 0; i < foodDeck.size(); i++) {
+            if (foodDeck.get(i).getName().equals(foodDiscard.get(0).getName()) && !alreadyReceived) {
+                targetCardIndex = i;
                 alreadyReceived = true;
             }
-            count++;
+        }
+        if (targetCardIndex != -1) {
+            Utility.moveCards(foodDeck, targetCardIndex, currentPlayer.getHand());
         }
     }
 

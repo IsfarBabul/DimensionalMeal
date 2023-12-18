@@ -60,9 +60,9 @@ public class DimensionalMeal {
         }
         System.out.println("|          |");
         if (mealCard.getLevel() == 4) {
-            System.out.println("|[0] \uD83C\uDFC6WIN! |");
+            System.out.println("|" + Utility.returnFunText("[0] \uD83C\uDFC6WIN!", 33) + "|");
         } else {
-            System.out.println("|[0] " + currentPlayer.getDimensionLevel() + "-->" + (currentPlayer.getDimensionLevel() + 1) + " |");
+            System.out.println("|" + Utility.returnFunText("[0] " + currentPlayer.getDimensionLevel() + "-->" + (currentPlayer.getDimensionLevel() + 1),  33) + " |");
         }
         System.out.println("L__________J");
         System.out.println();
@@ -73,20 +73,20 @@ public class DimensionalMeal {
         System.out.println(currentPlayer.getPlayerName() + "'s Hand:");
         Utility.printElementNames(currentPlayer.getHand());
         System.out.println();
-        System.out.println("[1] Buy a Dimension Card(Cost: 1 action)");
-        System.out.println("[2] Buy a Food Card (Cost: 2 actions)");
-        System.out.println("[3] Upgrade a Food Card(Cost: 1 action)");
-        System.out.println("[4] Play a Food Card in your hand (Cost: Whatever the card costs of food)");
-        System.out.println("[5] Fuse two Dimension Cards of the same type (Cost: Level of dimension you want to get to)");
-        System.out.println("[6] Enhanced Fusion (Cost: Double the Level of dimension you want to get to)");
-        System.out.println("[7] Check the Stats of a card you have");
-        System.out.println("[8] Check Dimension Discard");
-        System.out.println("[9] Check Food Discard");
-        System.out.println("[10] Check Meal Discard");
-        System.out.println("[11] Check other players' stats");
-        System.out.println("[12] Instructions to how each other option works");
+        Utility.funText("[1] Buy a Dimension Card(Cost: 1 action)", 32);
+        Utility.funText("[2] Buy a Food Card (Cost: 2 actions)", 36);
+        Utility.funText("[3] Upgrade a Food Card(Cost: 1 action)", 36);
+        Utility.funText("[4] Play a Food Card in your hand (Cost: Whatever the card costs of food)", 36);
+        Utility.funText("[5] Fuse two Dimension Cards of the same type (Cost: Level of dimension you want to get to)", 34);
+        Utility.funText("[6] Enhanced Fusion (Cost: Double the Level of dimension you want to get to)", 34);
+        Utility.funText("[7] Check the Stats of a card you have", 35);
+        Utility.funText("[8] Check Dimension Discard", 35);
+        Utility.funText("[9] Check Food Discard", 35);
+        Utility.funText("[10] Check Meal Discard", 35);
+        Utility.funText("[11] Check other players' stats", 35);
+        Utility.funText("[12] Instructions to how each other option works", 31);
         System.out.println();
-        System.out.println("Enter an Option:");
+        System.out.println("Enter an Option(invalid options do nothing):");
     }
     private void game() {
         while (!win) {
@@ -214,14 +214,18 @@ public class DimensionalMeal {
         }
     }
     private void optionOutcome(int outcome) {
+        if(!currentPlayer.getHand().isEmpty()) {
+            switch (outcome) {
+                case 0 -> upgradeLevel();
+                case 3 -> upgradeFoodCard();
+                case 4 -> playFoodCard();
+                case 5 -> fuse();
+                case 6 -> enhanceFuse();
+            }
+        }
         switch (outcome) {
-            case 0 -> upgradeLevel();
             case 1 -> buyDimensionCard();
             case 2 -> buyFoodCard();
-            case 3 -> upgradeFoodCard();
-            case 4 -> playFoodCard();
-            case 5 -> fuse();
-            case 6 -> enhanceFuse();
             case 7 -> checkHandCardStats();
             case 8 -> checkDimensionDiscard();
             case 9 -> checkFoodDiscard();
@@ -230,18 +234,50 @@ public class DimensionalMeal {
             case 12 -> optionInstructions();
             case 69 -> System.out.println("Nice! Never Gonna Give You Up!");
             case 420 -> System.out.println("You needed option 12 to get here didn't you...or your that unoriginal...");
-            default -> System.out.println("Option Invalid! Choose a different option!");
         }
         scan.nextLine();
     }
     private void upgradeLevel() {
-
+        int levelToUpgradeTo = currentPlayer.getDimensionLevel() + 1;
+        ArrayList<String> requiredFoodItems = currentPlayer.getMealCard().getFoodItem();
+        ArrayList<Integer> requiredMultipliers = currentPlayer.getMealCard().getMultipliers();
+        ArrayList<String> playerFoodItems = new ArrayList<>(requiredFoodItems.size());
+        ArrayList<Integer> playerMultipiers = new ArrayList<>(requiredMultipliers.size());
+        for (int i = 0; i < requiredFoodItems.size(); i++) {
+            for (Card food : currentPlayer.getHand()) {
+                if (food.getName().equals(requiredFoodItems.get(i)) && food.getLevel() == currentPlayer.getDimensionLevel()) {
+                    if (food.equals(item)) {
+                        if (!foodItem.contains(food)) {
+                            foodItem.add(food);
+                        }
+                        count++;
+                    }
+                }
+            }
+        }
     }
     private void checkOpponentStats() {
 
     }
     private void optionInstructions() {
-
+        Utility.clearWindow();
+        Utility.funText("Options", 4);
+        System.out.println("[0] Indicates an pointing from your current level to the level you can get to or show \"\uD83C\uDFC6WIN!\" if you can win.");
+        System.out.println("[1] Spend 1 action to buy a Dimension card from the Dimension deck.");
+        System.out.println("[2] Spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[3] Spend 1 action to upgrade 1 Food card to the next level(and not any level higher) by selecting that Food card and 1 Dimension card matching the level to upgrade to.");
+        System.out.println("[4] Play one Food card from your hand and put it in the Food discard. Spend the necessary amount of actions.");
+        System.out.println("[5] Fuse two Dimension cards into one of the next level by discarding two of the same Dimension cards and then drawing from a separate Fuse pile.");
+        System.out.println("[6] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[7] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[8] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[9] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[10] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[11] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[12] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[69] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[420] Allows you to spend 2 actions to buy a Food card from the Food deck.");
+        System.out.println("[Any other Choice] Any choice that is not one of the above or can't be done due to certain restrictions will simply do nothing and take no actions from you.");
     }
     private void playFoodCard() {
         ArrayList<Card> foodCards = new ArrayList<>();
