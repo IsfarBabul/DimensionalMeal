@@ -238,24 +238,37 @@ public class DimensionalMeal {
         scan.nextLine();
     }
     private void upgradeLevel() {
-        int levelToUpgradeTo = currentPlayer.getDimensionLevel() + 1;
         ArrayList<String> requiredFoodItems = currentPlayer.getMealCard().getFoodItem();
         ArrayList<Integer> requiredMultipliers = currentPlayer.getMealCard().getMultipliers();
-        ArrayList<String> playerFoodItems = new ArrayList<>(requiredFoodItems.size());
-        ArrayList<Integer> playerMultipiers = new ArrayList<>(requiredMultipliers.size());
+        ArrayList<String> requiredFood = new ArrayList<>();
         for (int i = 0; i < requiredFoodItems.size(); i++) {
-            for (Card food : currentPlayer.getHand()) {
-                if (food.getName().equals(requiredFoodItems.get(i)) && food.getLevel() == currentPlayer.getDimensionLevel()) {
-                    if (food.equals(item)) {
-                        if (!foodItem.contains(food)) {
-                            foodItem.add(food);
-                        }
-                        count++;
+            for (int j = 0; j < requiredMultipliers.get(i); i++) {    //list out the food requirements to check from
+                requiredFood.add(requiredFoodItems.get(i));
+            }
+        }
+        ArrayList<Integer> cardUpgradeIndex = new ArrayList<>();
+        for (String requiredFoodItem : requiredFoodItems) {
+            for (int j = 0; j < currentPlayer.getHand().size(); j++) {
+                if (currentPlayer.getHand().get(j).getName().equals(requiredFoodItem) && currentPlayer.getHand().get(j).getLevel() == currentPlayer.getDimensionLevel()) {
+                    int playerCardIndex = currentPlayer.getHand().indexOf(currentPlayer.getHand().get(j));
+                    if (!cardUpgradeIndex.isEmpty()) {
+                        for (int k = 0; cardUpgradeIndex.get(k) != playerCardIndex; k++) {                  //identifies each card in the player's hand and gets the index of that card
+                            cardUpgradeIndex.add(playerCardIndex);                                          //if a card is in the array holding the card indexes then it meets the requirements of upgrading
+                        }                                                                                   //so all cards whose indexes are in this array will be discarded for the upgrade
+                    } else {
+                        cardUpgradeIndex.add(playerCardIndex);
                     }
                 }
             }
         }
+        if (cardUpgradeIndex.size() == requiredFood.size()) {
+            for (Integer upgradeIndex : cardUpgradeIndex) {
+                Utility.moveCards(currentPlayer.getHand(), upgradeIndex, foodDiscard);     //if there are enough cards to satisfy the upgrades then the upgrading occurs, otherwise nothing more will happen
+            }
+            currentPlayer.increaseDimensionLevel(1);
+        }
     }
+
     private void checkOpponentStats() {
 
     }
@@ -418,8 +431,8 @@ public class DimensionalMeal {
         int levelOfCurrentFuse = -1;
         int fuseAttemptLevel = dimensionCards.get(fusePotential[0]).getLevel();
         int count = 0;
-        for (int i = 0; i < fusePotential.length; i++) {
-            if (dimensionCards.get(fusePotential[i]).getLevel() == fuseAttemptLevel) {
+        for (int fusePotentialIndex : fusePotential) {
+            if (dimensionCards.get(fusePotentialIndex).getLevel() == fuseAttemptLevel) {
                 count++;
             }
         }
